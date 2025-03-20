@@ -1,4 +1,3 @@
-
 import { Airdrop, BlockchainType } from './types';
 
 export const blockchains: BlockchainType[] = [
@@ -229,6 +228,235 @@ export const mockAirdrops: Airdrop[] = [
       'Participate in at least 10 governance proposals',
       'Maintain a minimum balance throughout the period',
       'Register for the distribution after the qualifying period'
+    ]
+  },
+  // New airdrops from Telegram channel
+  {
+    id: '11',
+    name: 'Blast Protocol',
+    description: 'A new L2 solution with native yield for ETH and stablecoins, founded by Tieshun Roquerre (Blur founder).',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'BLAST',
+    estimatedValue: '$100-500',
+    startDate: '2024-05-01',
+    endDate: '2024-07-01',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://blast.io/en',
+    steps: [
+      'Connect your ETH wallet to Blast',
+      'Bridge assets to the Blast L2',
+      'Interact with protocols on the network',
+      'Complete social media tasks',
+      'Maintain activity until the airdrop snapshot'
+    ]
+  },
+  {
+    id: '12',
+    name: 'Zeta Markets',
+    description: 'Solana-based decentralized derivatives exchange offering futures and options trading.',
+    logo: 'https://cryptologos.cc/logos/solana-sol-logo.png',
+    blockchain: 'Solana',
+    tokenSymbol: 'ZETA',
+    estimatedValue: '$50-300',
+    startDate: '2024-04-15',
+    endDate: '2024-06-30',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    link: 'https://zeta.markets',
+    steps: [
+      'Create an account on Zeta Markets',
+      'Complete KYC verification if needed',
+      'Trade options or futures on the platform',
+      'Maintain a minimum trading volume',
+      'Join their community channels'
+    ]
+  },
+  {
+    id: '13',
+    name: 'LayerZero',
+    description: 'Omnichain interoperability protocol enabling cross-chain messaging and communication.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'ZRO',
+    estimatedValue: '$100-400',
+    startDate: '2024-03-20',
+    endDate: '2024-08-01',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://layerzero.network',
+    steps: [
+      'Bridge assets across different chains using LayerZero',
+      'Interact with protocols integrated with LayerZero',
+      'Complete specific transactions on supported chains',
+      'Follow and engage with social media channels'
+    ]
+  },
+  {
+    id: '14',
+    name: 'Polyhedra Network',
+    description: 'ZK rollup infrastructure for cross-chain communication and interoperability.',
+    logo: 'https://cryptologos.cc/logos/polygon-matic-logo.png',
+    blockchain: 'Polygon',
+    tokenSymbol: 'POLY',
+    estimatedValue: '$50-250',
+    startDate: '2024-04-01',
+    endDate: '2024-07-15',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    link: 'https://polyhedra.network',
+    steps: [
+      'Use Polyhedra ZK bridges to transfer assets',
+      'Interact with dApps in their ecosystem',
+      'Complete social engagement tasks',
+      'Hold transactions until snapshot date'
+    ]
+  },
+  {
+    id: '15',
+    name: 'Merlin Chain',
+    description: 'A Bitcoin Layer-2 solution focused on bringing AI capabilities to Bitcoin.',
+    logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+    blockchain: 'Other',
+    tokenSymbol: 'MERL',
+    estimatedValue: '$30-200',
+    startDate: '2024-03-15',
+    endDate: '2024-06-01',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://merlinchain.io',
+    steps: [
+      'Bridge BTC to Merlin Chain',
+      'Interact with AI-powered dApps',
+      'Complete social tasks and community engagement',
+      'Hold bridged assets until the snapshot date'
+    ]
+  },
+  {
+    id: '16',
+    name: 'ZKsync Era',
+    description: 'Layer-2 scaling solution for Ethereum using zero-knowledge proofs.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'ZKS',
+    estimatedValue: '$100-500',
+    startDate: '2024-02-10',
+    endDate: '2024-08-10',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://zksync.io',
+    steps: [
+      'Bridge ETH or tokens to ZKsync Era',
+      'Perform transactions on the network',
+      'Interact with dApps in the ecosystem',
+      'Maintain activity for potential retroactive airdrop'
+    ]
+  },
+  {
+    id: '17',
+    name: 'Taiko',
+    description: 'Decentralized, Ethereum-equivalent ZK-Rollup focused on full EVM compatibility.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'TAIKO',
+    estimatedValue: '$50-300',
+    startDate: '2024-03-01',
+    endDate: '2024-06-30',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://taiko.xyz',
+    steps: [
+      'Bridge assets to Taiko testnet',
+      'Perform transactions on the network',
+      'Test various dApps in their ecosystem',
+      'Provide feedback and report bugs',
+      'Participate in community events'
+    ]
+  },
+  {
+    id: '18',
+    name: 'Linea',
+    description: 'Ethereum Layer-2 scaling solution developed by ConsenSys using zero-knowledge technology.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'LINEA',
+    estimatedValue: '$50-300',
+    startDate: '2024-03-15',
+    endDate: '2024-07-01',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://linea.build',
+    steps: [
+      'Bridge ETH to Linea',
+      'Use dApps deployed on Linea',
+      'Complete transactions regularly',
+      'Maintain activity until potential airdrop announcement'
+    ]
+  },
+  {
+    id: '19',
+    name: 'Scroll',
+    description: 'Layer-2 zkEVM scaling solution for Ethereum focused on preserving compatibility.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'SCROLL',
+    estimatedValue: '$50-250',
+    startDate: '2024-02-20',
+    endDate: '2024-07-15',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    link: 'https://scroll.io',
+    steps: [
+      'Bridge assets to Scroll',
+      'Interact with dApps on the network',
+      'Complete regular transactions',
+      'Engage with the community',
+      'Maintain activity through potential snapshot periods'
+    ]
+  },
+  {
+    id: '20',
+    name: 'Sei Network',
+    description: 'Layer-1, optimized for trading, with parallelized execution and fast finality.',
+    logo: 'https://cryptologos.cc/logos/sei-network-sei-logo.png',
+    blockchain: 'Other',
+    tokenSymbol: 'SEI',
+    estimatedValue: '$100-400',
+    startDate: '2024-03-10',
+    endDate: '2024-06-10',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: true,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://www.sei.io',
+    steps: [
+      'Create a Sei wallet',
+      'Complete KYC verification',
+      'Participate in testnet activities',
+      'Trade on Sei-based exchanges',
+      'Engage with community campaigns'
     ]
   }
 ];
