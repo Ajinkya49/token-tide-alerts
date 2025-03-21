@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AirdropCard from './AirdropCard';
 import { Airdrop, FilterOptions } from '../utils/types';
 import { Input } from './ui/input';
@@ -14,6 +14,7 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
   const [filteredAirdrops, setFilteredAirdrops] = useState<Airdrop[]>(airdrops);
   const [visibleCount, setVisibleCount] = useState(6);
   const [searchTerm, setSearchTerm] = useState('');
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const searchResults = airdrops.filter(airdrop => {
@@ -58,9 +59,28 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
     setVisibleCount(6);
   }, [airdrops, filters, searchTerm]);
 
-  const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 6, filteredAirdrops.length));
-  };
+  // Implement infinite scroll with Intersection Observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < filteredAirdrops.length) {
+          // Load more items when the target element is visible
+          setVisibleCount(prev => Math.min(prev + 6, filteredAirdrops.length));
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [visibleCount, filteredAirdrops.length]);
 
   return (
     <div className="w-full max-w-7xl mx-auto px-6 pb-20">
@@ -105,7 +125,7 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
             {filteredAirdrops.slice(0, visibleCount).map((airdrop, index) => (
               <div 
                 key={airdrop.id} 
-                className={`transition-all duration-500 delay-${index * 100} animate-fade-up`}
+                className="transition-all duration-500 animate-fade-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <AirdropCard airdrop={airdrop} />
@@ -113,15 +133,9 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
             ))}
           </div>
 
+          {/* Invisible element for intersection observer */}
           {visibleCount < filteredAirdrops.length && (
-            <div className="flex justify-center mt-12">
-              <button
-                onClick={loadMore}
-                className="px-6 py-2 border border-border bg-card/50 hover:bg-card text-accent rounded-lg transition-all duration-200"
-              >
-                Load More Airdrops
-              </button>
-            </div>
+            <div ref={observerTarget} className="h-10 w-full" />
           )}
         </>
       )}
