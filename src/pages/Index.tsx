@@ -13,11 +13,8 @@ const Index = () => {
     status: 'All',
     type: 'All',
     requiresKYC: 'All',
+    investmentStatus: 'All'
   });
-
-  const handleFilterChange = (newFilters: FilterOptions) => {
-    setFilters(newFilters);
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,7 +31,7 @@ const Index = () => {
             </p>
           </div>
           
-          <Filters onFilterChange={handleFilterChange} />
+          <Filters filters={filters} setFilters={setFilters} />
           <AirdropGrid airdrops={mockAirdrops} filters={filters} />
         </section>
       </main>
