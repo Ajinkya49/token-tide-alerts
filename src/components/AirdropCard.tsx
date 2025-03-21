@@ -27,6 +27,19 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
     }
   };
 
+  const getInvestmentStatusColor = (status?: string) => {
+    switch (status) {
+      case 'Free':
+        return 'bg-green-500/10 text-green-500';
+      case 'Invest':
+        return 'bg-blue-500/10 text-blue-500';
+      case 'Undisclosed':
+        return 'bg-yellow-500/10 text-yellow-500';
+      default:
+        return 'bg-gray-500/10 text-gray-500';
+    }
+  };
+
   return (
     <div 
       className="group relative flex flex-col h-full glass-card rounded-xl overflow-hidden transform transition-all duration-300 ease-in-out animate-scale-in"
@@ -67,8 +80,20 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
             </div>
           </div>
           
-          <div className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(airdrop.status)}`}>
-            {airdrop.status}
+          <div className="flex flex-col gap-1 items-end">
+            <div className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(airdrop.status)}`}>
+              {airdrop.status}
+            </div>
+            {airdrop.investmentStatus && (
+              <div className={`px-2.5 py-1 rounded-full text-xs font-medium ${getInvestmentStatusColor(airdrop.investmentStatus)}`}>
+                {airdrop.investmentStatus}
+              </div>
+            )}
+            {airdrop.timeline && (
+              <div className="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                {airdrop.timeline}
+              </div>
+            )}
           </div>
         </div>
         
