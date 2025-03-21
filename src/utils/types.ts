@@ -31,6 +31,8 @@ export interface Airdrop {
   requiresDiscord?: boolean;
   link: string;
   steps?: string[];
+  fundingAmount?: string; // New field for tracking funding
+  fundingRound?: string; // New field for tracking funding round
 }
 
 export interface FilterOptions {

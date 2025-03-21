@@ -100,6 +100,17 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
             <span className="block text-muted-foreground">End Date</span>
             <span className="font-medium">{formatDate(airdrop.endDate)}</span>
           </div>
+          
+          {/* Add funding information if available */}
+          {airdrop.fundingAmount && (
+            <div className="text-xs col-span-2">
+              <span className="block text-muted-foreground">Funding</span>
+              <span className="font-medium">
+                {airdrop.fundingAmount}
+                {airdrop.fundingRound && ` (${airdrop.fundingRound})`}
+              </span>
+            </div>
+          )}
         </div>
         
         {/* Requirements */}
