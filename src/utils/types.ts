@@ -14,8 +14,6 @@ export type AirdropStatus = 'Active' | 'Upcoming' | 'Ended';
 
 export type AirdropType = 'Token' | 'NFT' | 'Governance' | 'Other';
 
-export type InvestmentStatus = 'Free' | 'Invest' | 'Undisclosed';
-
 export interface Airdrop {
   id: string;
   name: string;
@@ -33,10 +31,8 @@ export interface Airdrop {
   requiresDiscord?: boolean;
   link: string;
   steps?: string[];
-  fundingAmount?: string; // For tracking funding
-  fundingRound?: string; // For tracking funding round
-  investmentStatus?: InvestmentStatus; // New field for investment status
-  timeline?: string; // For tracking project timeline (Q1, Q2-Q3, etc.)
+  fundingAmount?: string; // New field for tracking funding
+  fundingRound?: string; // New field for tracking funding round
 }
 
 export interface FilterOptions {
@@ -44,13 +40,4 @@ export interface FilterOptions {
   status: AirdropStatus | 'All';
   type: AirdropType | 'All';
   requiresKYC: boolean | 'All';
-  investmentStatus?: InvestmentStatus | 'All';
-}
-
-export interface User {
-  id: string;
-  email: string;
-  name?: string;
-  avatar?: string;
-  savedAirdrops?: string[]; // Array of airdrop IDs that the user has saved
 }

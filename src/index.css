@@ -94,11 +94,6 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
-  html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-  }
 }
 
 /* Custom styles */
@@ -142,35 +137,4 @@
 /* Smooth transitions */
 .page-transition {
   @apply transition-all duration-300 ease-in-out;
-}
-
-/* Scroll improvements */
-.scroll-smooth {
-  scroll-behavior: smooth;
-}
-
-/* Remove App.css styles that might be conflicting */
-#root {
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(156, 163, 175, 0.8);
 }

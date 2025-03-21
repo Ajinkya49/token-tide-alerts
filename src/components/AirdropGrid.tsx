@@ -1,9 +1,7 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import AirdropCard from './AirdropCard';
 import { Airdrop, FilterOptions } from '../utils/types';
-import { Input } from './ui/input';
-import { Search } from 'lucide-react';
 
 interface AirdropGridProps {
   airdrops: Airdrop[];
@@ -13,18 +11,9 @@ interface AirdropGridProps {
 const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
   const [filteredAirdrops, setFilteredAirdrops] = useState<Airdrop[]>(airdrops);
   const [visibleCount, setVisibleCount] = useState(6);
-  const [searchTerm, setSearchTerm] = useState('');
-  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const searchResults = airdrops.filter(airdrop => {
-      // Search functionality
-      if (searchTerm && !airdrop.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
-          !airdrop.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          !airdrop.tokenSymbol.toLowerCase().includes(searchTerm.toLowerCase())) {
-        return false;
-      }
-
+    const filtered = airdrops.filter(airdrop => {
       // Filter by blockchain
       if (filters.blockchain !== 'All' && airdrop.blockchain !== filters.blockchain) {
         return false;
@@ -45,59 +34,20 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
         return false;
       }
 
-      // Filter by investment status
-      if (filters.investmentStatus && filters.investmentStatus !== 'All' && 
-          airdrop.investmentStatus !== filters.investmentStatus) {
-        return false;
-      }
-
       return true;
     });
 
-    setFilteredAirdrops(searchResults);
+    setFilteredAirdrops(filtered);
     // Reset visible count when filters change
     setVisibleCount(6);
-  }, [airdrops, filters, searchTerm]);
+  }, [airdrops, filters]);
 
-  // Implement infinite scroll with Intersection Observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && visibleCount < filteredAirdrops.length) {
-          // Load more items when the target element is visible
-          setVisibleCount(prev => Math.min(prev + 6, filteredAirdrops.length));
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [visibleCount, filteredAirdrops.length]);
+  const loadMore = () => {
+    setVisibleCount(prev => Math.min(prev + 6, filteredAirdrops.length));
+  };
 
   return (
     <div className="w-full max-w-7xl mx-auto px-6 pb-20">
-      {/* Search bar */}
-      <div className="relative mb-8">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-          <Input
-            type="text"
-            placeholder="Search airdrops by name, symbol, or description..."
-            className="pl-10 pr-4 py-2 w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
       {filteredAirdrops.length === 0 ? (
         <div className="text-center py-16">
           <svg 
@@ -113,19 +63,15 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
             <path d="M12 8v4M12 16h.01"/>
           </svg>
           <h3 className="text-xl font-medium mb-2">No airdrops found</h3>
-          <p className="text-muted-foreground">Try adjusting your filters or search terms to see more results.</p>
+          <p className="text-muted-foreground">Try adjusting your filters to see more results.</p>
         </div>
       ) : (
         <>
-          <div className="mb-4 text-sm text-muted-foreground">
-            Showing {Math.min(visibleCount, filteredAirdrops.length)} of {filteredAirdrops.length} results
-          </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAirdrops.slice(0, visibleCount).map((airdrop, index) => (
               <div 
                 key={airdrop.id} 
-                className="transition-all duration-500 animate-fade-up"
+                className={`transition-all duration-500 delay-${index * 100} animate-fade-up`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <AirdropCard airdrop={airdrop} />
@@ -133,9 +79,15 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
             ))}
           </div>
 
-          {/* Invisible element for intersection observer */}
           {visibleCount < filteredAirdrops.length && (
-            <div ref={observerTarget} className="h-10 w-full" />
+            <div className="flex justify-center mt-12">
+              <button
+                onClick={loadMore}
+                className="px-6 py-2 border border-border bg-card/50 hover:bg-card text-accent rounded-lg transition-all duration-200"
+              >
+                Load More Airdrops
+              </button>
+            </div>
           )}
         </>
       )}

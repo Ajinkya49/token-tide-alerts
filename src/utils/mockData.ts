@@ -1,7 +1,4 @@
 import { Airdrop, BlockchainType } from './types';
-import { newAirdrops } from './airdropData';
-import { newAirdrops2 } from './airdropData2';
-import { newAirdrops3 } from './airdropData3';
 
 export const blockchains: BlockchainType[] = [
   'Ethereum',
@@ -15,8 +12,7 @@ export const blockchains: BlockchainType[] = [
   'Other',
 ];
 
-// Original mockAirdrops array with 30 entries
-const originalAirdrops: Airdrop[] = [
+export const mockAirdrops: Airdrop[] = [
   {
     id: '1',
     name: 'Arbitrum Odyssey',
@@ -716,12 +712,4 @@ const originalAirdrops: Airdrop[] = [
       'Follow official channels for airdrop announcements'
     ]
   }
-];
-
-// Combine all airdrops
-export const mockAirdrops: Airdrop[] = [
-  ...originalAirdrops,
-  ...newAirdrops,
-  ...newAirdrops2,
-  ...newAirdrops3
 ];
