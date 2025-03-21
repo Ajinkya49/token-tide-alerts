@@ -1,157 +1,171 @@
 
-import { useState, useEffect } from 'react';
-import { FilterOptions, BlockchainType, AirdropStatus, AirdropType } from '../utils/types';
+import { useState } from 'react';
 import { blockchains } from '../utils/mockData';
+import { AirdropStatus, AirdropType, FilterOptions, FundingRange } from '../utils/types';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface FiltersProps {
-  onFilterChange: (filters: FilterOptions) => void;
+  filters: FilterOptions;
+  setFilters: React.Dispatch<React.SetStateAction<FilterOptions>>;
 }
 
-const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
-  const [filters, setFilters] = useState<FilterOptions>({
-    blockchain: 'All',
-    status: 'All',
-    type: 'All',
-    requiresKYC: 'All',
-  });
-
-  const [isVisible, setIsVisible] = useState(false);
+const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 600);
+  const handleBlockchainChange = (blockchain: string) => {
+    setFilters(prev => ({ ...prev, blockchain: blockchain as FilterOptions['blockchain'] }));
+  };
 
-    return () => clearTimeout(timer);
-  }, []);
+  const handleStatusChange = (status: string) => {
+    setFilters(prev => ({ ...prev, status: status as FilterOptions['status'] }));
+  };
 
-  const handleFilterChange = (
-    key: keyof FilterOptions,
-    value: BlockchainType | AirdropStatus | AirdropType | boolean | 'All'
-  ) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+  const handleTypeChange = (type: string) => {
+    setFilters(prev => ({ ...prev, type: type as FilterOptions['type'] }));
+  };
+
+  const handleKYCChange = (value: string) => {
+    setFilters(prev => ({ 
+      ...prev, 
+      requiresKYC: value === 'yes' 
+        ? true 
+        : value === 'no' 
+          ? false 
+          : 'All' 
+    }));
+  };
+
+  const handleFundingRangeChange = (range: string) => {
+    setFilters(prev => ({ ...prev, fundingRange: range as FundingRange }));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters(prev => ({ ...prev, searchQuery: e.target.value }));
+  };
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
   };
 
   return (
-    <div className={`relative w-full max-w-7xl mx-auto px-6 transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-      <div className="glass-card rounded-xl mb-8 overflow-hidden transition-all duration-300 ease-in-out">
-        <div className="flex flex-col md:flex-row justify-between items-center p-6">
-          <h2 className="text-xl font-medium mb-4 md:mb-0">Filter Airdrops</h2>
+    <div className="w-full max-w-7xl mx-auto px-6 mb-8">
+      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+          <h3 className="text-lg font-medium">Filter Airdrops</h3>
           
-          <div className="flex flex-wrap gap-3">
-            {/* Status Filter */}
-            <div className="relative">
-              <select
-                value={filters.status as string}
-                onChange={(e) => handleFilterChange('status', e.target.value as AirdropStatus | 'All')}
-                className="glass-input px-4 py-2 pr-10 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-accent/40 min-w-[120px]"
-              >
-                <option value="All">All Status</option>
-                <option value="Active">Active</option>
-                <option value="Upcoming">Upcoming</option>
-                <option value="Ended">Ended</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Type Filter */}
-            <div className="relative">
-              <select
-                value={filters.type as string}
-                onChange={(e) => handleFilterChange('type', e.target.value as AirdropType | 'All')}
-                className="glass-input px-4 py-2 pr-10 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-accent/40 min-w-[120px]"
-              >
-                <option value="All">All Types</option>
-                <option value="Token">Token</option>
-                <option value="NFT">NFT</option>
-                <option value="Governance">Governance</option>
-                <option value="Other">Other</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
-            </div>
-
-            {/* KYC Filter */}
-            <div className="relative">
-              <select
-                value={filters.requiresKYC as string}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  let boolValue: boolean | 'All' = 'All';
-                  if (value === 'true') boolValue = true;
-                  if (value === 'false') boolValue = false;
-                  handleFilterChange('requiresKYC', boolValue);
-                }}
-                className="glass-input px-4 py-2 pr-10 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-accent/40 min-w-[120px]"
-              >
-                <option value="All">KYC: Any</option>
-                <option value="true">KYC: Required</option>
-                <option value="false">KYC: Not Required</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="glass-input px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 flex items-center space-x-1"
-            >
-              <span>Blockchains</span>
-              <svg
-                className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+          <div className="w-full md:w-1/3">
+            <Input
+              type="text"
+              placeholder="Search airdrops..."
+              className="glass-input"
+              value={filters.searchQuery || ''}
+              onChange={handleSearchChange}
+            />
           </div>
+          
+          <button
+            onClick={toggleExpanded}
+            className="flex items-center text-sm font-medium text-accent hover:text-accent/90 transition-colors"
+          >
+            {isExpanded ? 'Hide Filters' : 'Show All Filters'}
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={`ml-1 w-4 h-4 transition-transform ${
+                isExpanded ? 'rotate-180' : ''
+              }`}
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
         </div>
 
-        {/* Expandable blockchain filters */}
-        <div
-          className={`px-6 pb-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 transition-all duration-300 ease-in-out overflow-hidden ${
-            isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <div
-            className={`cursor-pointer rounded-lg px-3 py-2 text-center text-sm transition-colors ${
-              filters.blockchain === 'All'
-                ? 'bg-accent text-white'
-                : 'glass-input hover:bg-accent/10'
-            }`}
-            onClick={() => handleFilterChange('blockchain', 'All')}
-          >
-            All Blockchains
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div>
+            <Label className="mb-2 block">Blockchain</Label>
+            <select
+              className="w-full p-2 rounded-md border border-input bg-background"
+              value={filters.blockchain}
+              onChange={(e) => handleBlockchainChange(e.target.value)}
+            >
+              <option value="All">All Blockchains</option>
+              {blockchains.map((blockchain) => (
+                <option key={blockchain} value={blockchain}>
+                  {blockchain}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {blockchains.map((blockchain) => (
-            <div
-              key={blockchain}
-              className={`cursor-pointer rounded-lg px-3 py-2 text-center text-sm transition-colors ${
-                filters.blockchain === blockchain
-                  ? 'bg-accent text-white'
-                  : 'glass-input hover:bg-accent/10'
-              }`}
-              onClick={() => handleFilterChange('blockchain', blockchain)}
+          <div>
+            <Label className="mb-2 block">Status</Label>
+            <select
+              className="w-full p-2 rounded-md border border-input bg-background"
+              value={filters.status}
+              onChange={(e) => handleStatusChange(e.target.value)}
             >
-              {blockchain}
+              <option value="All">All Statuses</option>
+              <option value="Active">Active</option>
+              <option value="Upcoming">Upcoming</option>
+              <option value="Ended">Ended</option>
+            </select>
+          </div>
+
+          <div>
+            <Label className="mb-2 block">Type</Label>
+            <select
+              className="w-full p-2 rounded-md border border-input bg-background"
+              value={filters.type}
+              onChange={(e) => handleTypeChange(e.target.value)}
+            >
+              <option value="All">All Types</option>
+              <option value="Token">Token</option>
+              <option value="NFT">NFT</option>
+              <option value="Governance">Governance</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div>
+            <Label className="mb-2 block">Requires KYC</Label>
+            <select
+              className="w-full p-2 rounded-md border border-input bg-background"
+              value={
+                filters.requiresKYC === true
+                  ? 'yes'
+                  : filters.requiresKYC === false
+                  ? 'no'
+                  : 'all'
+              }
+              onChange={(e) => handleKYCChange(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          
+          {isExpanded && (
+            <div>
+              <Label className="mb-2 block">Funding Range</Label>
+              <select
+                className="w-full p-2 rounded-md border border-input bg-background"
+                value={filters.fundingRange || 'All'}
+                onChange={(e) => handleFundingRangeChange(e.target.value)}
+              >
+                <option value="All">All Funding Ranges</option>
+                <option value="Under $50M">Under $50M</option>
+                <option value="$50M-$100M">$50M-$100M</option>
+                <option value="$100M-$200M">$100M-$200M</option>
+                <option value="Over $200M">Over $200M</option>
+              </select>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

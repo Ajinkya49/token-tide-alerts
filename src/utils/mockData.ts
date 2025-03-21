@@ -711,5 +711,124 @@ export const mockAirdrops: Airdrop[] = [
       'Provide developer feedback',
       'Follow official channels for airdrop announcements'
     ]
-  }
-];
+  },
+  
+  // Adding new projects from the spreadsheet
+  {
+    id: '31',
+    name: 'Mantle',
+    description: 'Layer-2 scaling solution using optimistic rollups with a modular design',
+    logo: 'https://cryptologos.cc/logos/mantle-mnt-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'MNT',
+    estimatedValue: '$100-500',
+    startDate: '2023-07-14',
+    endDate: '2024-07-14',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    link: 'https://www.mantle.xyz',
+    fundingAmount: '$200M',
+    fundingRound: 'Series A',
+    steps: [
+      'Bridge ETH to Mantle Network',
+      'Use dApps in the Mantle ecosystem',
+      'Hold tokens until airdrop snapshot'
+    ]
+  },
+  {
+    id: '32',
+    name: 'zkSync',
+    description: 'ZK rollup Layer-2 scaling protocol for Ethereum',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'ZKS',
+    estimatedValue: '$100-500',
+    startDate: '2023-12-01',
+    endDate: '2024-09-30',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://zksync.io',
+    fundingAmount: '$458M',
+    fundingRound: 'Series C',
+    steps: [
+      'Bridge assets to zkSync Era',
+      'Use zkSync dApps',
+      'Trade regularly on the network'
+    ]
+  },
+  {
+    id: '33',
+    name: 'Starknet',
+    description: 'ZK rollup Layer-2 scaling protocol using Cairo programming language',
+    logo: 'https://cryptologos.cc/logos/starknet-strk-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'STRK',
+    estimatedValue: '$100-400',
+    startDate: '2023-12-01',
+    endDate: '2024-09-30',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://starknet.io',
+    fundingAmount: '$100M',
+    fundingRound: 'Series A',
+    steps: [
+      'Bridge assets to Starknet',
+      'Use DeFi protocols on Starknet', 
+      'Interact with dApps in the ecosystem'
+    ]
+  },
+  {
+    id: '34',
+    name: 'Linea',
+    description: 'Ethereum Layer-2 scaling solution by ConsenSys using ZK technology',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'LINEA',
+    estimatedValue: '$50-300',
+    startDate: '2023-07-12',
+    endDate: '2024-07-12',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://linea.build',
+    fundingAmount: 'Unknown',
+    fundingRound: 'Backed by ConsenSys',
+    steps: [
+      'Bridge ETH to Linea',
+      'Use dApps on Linea',
+      'Engage with Linea ecosystem'
+    ]
+  },
+  {
+    id: '35',
+    name: 'Scroll',
+    description: 'Layer-2 zkEVM scaling solution for Ethereum',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'SCROLL',
+    estimatedValue: '$50-300',
+    startDate: '2023-10-19',
+    endDate: '2024-10-19',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://scroll.io',
+    fundingAmount: '$80M',
+    fundingRound: 'Series A',
+    steps: [
+      'Bridge assets to Scroll',
+      'Complete transactions on Scroll',
+      'Use dApps in the ecosystem'
+    ]
+  },
+  {
+    id: '36',
+    name: 'Taiko',
+    description: 'Decentralized, Ethereum-equivalent ZK-Rollup',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: '

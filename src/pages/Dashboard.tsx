@@ -1,33 +1,67 @@
 
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Filters from '../components/Filters';
 import AirdropGrid from '../components/AirdropGrid';
-import { mockAirdrops } from '../utils/mockData';
 import { FilterOptions } from '../utils/types';
-import { Button } from '@/components/ui/button';
+import { mockAirdrops } from '../utils/mockData';
 
-const Index = () => {
+const Dashboard = () => {
+  const [user, setUser] = useState<{email: string} | null>(null);
   const [filters, setFilters] = useState<FilterOptions>({
     blockchain: 'All',
     status: 'All',
     type: 'All',
     requiresKYC: 'All',
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    setIsAuthenticated(!!user);
-  }, []);
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setUser(JSON.parse(storedUser));
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    navigate('/login');
+  };
+
+  if (!user) {
+    return null; // Will redirect to login
+  }
 
   return (
     <div className="min-h-screen bg-background app-gradient">
       <Navbar />
       
       <main>
+        <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Welcome, {user.email}</h1>
+          <Button variant="outline" onClick={handleLogout}>
+            Log out
+          </Button>
+        </div>
+        
         <Hero />
         
         <section id="airdrops" className="py-10">
@@ -36,22 +70,6 @@ const Index = () => {
             <p className="text-center text-muted-foreground mt-2 mb-10">
               Discover and track the most promising crypto airdrops
             </p>
-            
-            {!isAuthenticated && (
-              <div className="card-gradient rounded-lg p-6 mb-10 flex flex-col md:flex-row items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Unlock Full Access</h3>
-                  <p className="text-muted-foreground max-w-md">
-                    Sign up to save your favorite airdrops, get notifications, and access exclusive features.
-                  </p>
-                </div>
-                <div className="mt-6 md:mt-0">
-                  <Button asChild>
-                    <Link to="/signup">Sign up for free</Link>
-                  </Button>
-                </div>
-              </div>
-            )}
           </div>
           
           <Filters filters={filters} setFilters={setFilters} />
@@ -153,4 +171,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Dashboard;

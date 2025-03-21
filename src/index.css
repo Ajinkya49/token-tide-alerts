@@ -138,3 +138,16 @@
 .page-transition {
   @apply transition-all duration-300 ease-in-out;
 }
+
+/* Custom card and button styles */
+.airdrop-card {
+  @apply transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg;
+}
+
+.primary-button {
+  @apply bg-accent hover:bg-accent/90 text-white font-medium px-4 py-2 rounded-md transition-all;
+}
+
+.secondary-button {
+  @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium px-4 py-2 rounded-md transition-all;
+}
