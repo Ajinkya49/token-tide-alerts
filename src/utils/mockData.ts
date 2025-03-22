@@ -777,7 +777,7 @@ export const mockAirdrops: Airdrop[] = [
     fundingRound: 'Series A',
     steps: [
       'Bridge assets to Starknet',
-      'Use DeFi protocols on Starknet', 
+      'Use DeFi protocols on Starknet',
       'Interact with dApps in the ecosystem'
     ]
   },
@@ -831,4 +831,4 @@ export const mockAirdrops: Airdrop[] = [
     description: 'Decentralized, Ethereum-equivalent ZK-Rollup',
     logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
     blockchain: 'Ethereum',
-    tokenSymbol: '
+    tokenSymbol: 'TA
