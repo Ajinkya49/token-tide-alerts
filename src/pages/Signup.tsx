@@ -1,18 +1,29 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Switch } from "@/components/ui/switch";
+import { LogIn } from "lucide-react";
 import Logo from "../components/Logo";
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    const user = localStorage.getItem('user');
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,10 +50,23 @@ const Signup = () => {
       return;
     }
 
+    if (!agreeTerms) {
+      toast({
+        title: "Error",
+        description: "Please agree to the terms and conditions.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
     // Simulate account creation - in a real app, this would call an API
     setTimeout(() => {
       // Store user info in localStorage
-      localStorage.setItem('user', JSON.stringify({ email }));
+      localStorage.setItem('user', JSON.stringify({ 
+        email, 
+        createdAt: new Date().toISOString() 
+      }));
       
       toast({
         title: "Account created!",
@@ -108,13 +132,31 @@ const Signup = () => {
               className="glass-input"
             />
           </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="terms"
+              checked={agreeTerms}
+              onCheckedChange={setAgreeTerms}
+            />
+            <label htmlFor="terms" className="text-sm">
+              I agree to the <a href="#" className="text-accent hover:underline">Terms of Service</a> and <a href="#" className="text-accent hover:underline">Privacy Policy</a>
+            </label>
+          </div>
           
           <Button 
             type="submit" 
             className="w-full" 
             disabled={isLoading}
           >
-            {isLoading ? "Creating account..." : "Sign up"}
+            {isLoading ? (
+              "Creating account..."
+            ) : (
+              <>
+                <LogIn className="w-4 h-4 mr-2" />
+                Sign up
+              </>
+            )}
           </Button>
         </form>
         
