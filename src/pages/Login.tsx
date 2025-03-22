@@ -1,28 +1,17 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Switch } from "@/components/ui/switch";
-import { LogIn } from "lucide-react";
 import Logo from "../components/Logo";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if the user is already logged in
-    const user = localStorage.getItem('user');
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,21 +21,8 @@ const Login = () => {
     setTimeout(() => {
       // Simple validation
       if (email && password) {
-        // Store user info in localStorage with expiration if not "remember me"
-        const userData = { email, loginTime: new Date().toISOString() };
-        
-        if (rememberMe) {
-          localStorage.setItem('user', JSON.stringify(userData));
-        } else {
-          // For session-only storage, you could use sessionStorage instead
-          // But we'll use localStorage with an expiration time for demo purposes
-          const expirationTime = new Date().getTime() + 3600000; // 1 hour
-          localStorage.setItem('user', JSON.stringify({
-            ...userData,
-            expirationTime
-          }));
-        }
-        
+        // Store user info in localStorage
+        localStorage.setItem('user', JSON.stringify({ email }));
         toast({
           title: "Success!",
           description: "You have successfully logged in.",
@@ -108,30 +84,12 @@ const Login = () => {
             />
           </div>
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="remember-me"
-                checked={rememberMe}
-                onCheckedChange={setRememberMe}
-              />
-              <label htmlFor="remember-me" className="text-sm">Remember me</label>
-            </div>
-          </div>
-          
           <Button 
             type="submit" 
             className="w-full" 
             disabled={isLoading}
           >
-            {isLoading ? (
-              "Signing in..."
-            ) : (
-              <>
-                <LogIn className="w-4 h-4 mr-2" />
-                Sign in
-              </>
-            )}
+            {isLoading ? "Signing in..." : "Sign in"}
           </Button>
         </form>
         
