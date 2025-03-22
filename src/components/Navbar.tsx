@@ -1,95 +1,137 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { MoonIcon, SunIcon, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Search } from 'lucide-react';
-import Logo from './Logo';
-import { useTheme } from './ThemeProvider';
-import { useAuth } from './AuthProvider';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { useTheme } from "../components/ThemeProvider";
+import { useAuth } from "../components/AuthProvider";
+import Logo from "./Logo";
+import Notifications from "./Notifications";
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
-  
+  const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (window.scrollY > 10) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isDashboard = location.pathname === '/dashboard';
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    // We would handle the search functionality here
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle search submission
+    console.log("Search for:", searchQuery);
+  };
 
   return (
-    <header className={`sticky top-0 z-40 w-full transition-all duration-200 ${isScrolled ? 'bg-background/80 backdrop-blur-md border-b border-border shadow-sm' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
-          <Logo className="w-8 h-8" />
-          <span className="font-bold text-xl text-left">AJINKYA CRYPTO AIRDROP ALERTS</span>
-        </Link>
-        
-        <div className="flex-1 mx-4 hidden md:block">
-          {isSearchOpen ? (
-            <div className="max-w-md mx-auto">
-              <Input 
-                type="search" 
-                placeholder="Search airdrops..." 
-                className="w-full"
-                autoFocus
-                onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
-              />
-            </div>
-          ) : (
-            <nav className="flex items-center justify-center space-x-6">
-              <Link to="/" className="text-sm font-medium hover:text-accent transition-colors">
-                Home
-              </Link>
-              <a href="#airdrops" className="text-sm font-medium hover:text-accent transition-colors">
-                Airdrops
-              </a>
-              <a href="#" className="text-sm font-medium hover:text-accent transition-colors">
-                Learn
-              </a>
-              <a href="#" className="text-sm font-medium hover:text-accent transition-colors">
-                About
-              </a>
-            </nav>
-          )}
+    <header className={cn(
+      "sticky top-0 z-50 w-full backdrop-blur-lg transition-all",
+      scrolled ? "border-b shadow-sm" : "bg-transparent"
+    )}>
+      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        <div className="flex items-center gap-2">
+          <Logo />
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/">
+                  <NavigationMenuLink
+                    className={navigationMenuTriggerStyle({ className: "bg-transparent" })}
+                    active={location.pathname === "/"}
+                  >
+                    Home
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              {user && (
+                <NavigationMenuItem>
+                  <Link to="/dashboard">
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle({ className: "bg-transparent" })}
+                      active={location.pathname === "/dashboard"}
+                    >
+                      Dashboard
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              )}
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
-        
-        <div className="flex items-center space-x-3">
-          <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(!isSearchOpen)} className="md:inline-flex">
-            <Search className="h-5 w-5" />
-          </Button>
+
+        <div className="flex items-center gap-4">
+          <form onSubmit={handleSearchSubmit} className="hidden sm:flex relative">
+            <Input
+              type="search"
+              placeholder="Search airdrops..."
+              className="w-[200px] lg:w-[300px] bg-background/30"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <Button size="icon" variant="ghost" className="absolute right-0" type="submit">
+              <Search className="h-5 w-5" />
+            </Button>
+          </form>
+
+          {user && <Notifications />}
           
-          <Button variant="ghost" size="icon" onClick={toggleTheme} className="md:inline-flex">
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
-          
-          {user ? (
-            isDashboard ? (
-              <Button variant="outline" size="sm" onClick={logout}>
-                Sign out
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                {theme === 'dark' ? (
+                  <SunIcon className="h-5 w-5" />
+                ) : (
+                  <MoonIcon className="h-5 w-5" />
+                )}
               </Button>
-            ) : (
-              <Button variant="default" size="sm" asChild>
-                <Link to="/dashboard">Dashboard</Link>
-              </Button>
-            )
-          ) : (
-            <>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/login">Sign in</Link>
-              </Button>
-              <Button variant="default" size="sm" asChild>
-                <Link to="/signup">Sign up</Link>
-              </Button>
-            </>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={toggleTheme}>
+                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {!user && (
+            <div className="flex items-center gap-2">
+              <Link to="/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link to="/signup">
+                <Button variant="default">Signup</Button>
+              </Link>
+            </div>
           )}
         </div>
       </div>

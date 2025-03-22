@@ -9,6 +9,8 @@ import Filters from '../components/Filters';
 import AirdropGrid from '../components/AirdropGrid';
 import { FilterOptions } from '../utils/types';
 import { mockAirdrops } from '../utils/mockData';
+import { useNotifications } from '../components/NotificationProvider';
+import AirdropCardCalendar from '../components/AirdropCardCalendar';
 
 const Dashboard = () => {
   const [user, setUser] = useState<{email: string} | null>(null);
@@ -20,6 +22,11 @@ const Dashboard = () => {
   });
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { addNotification } = useNotifications();
+  const [seenAirdrops, setSeenAirdrops] = useState<Set<string>>(() => {
+    const saved = localStorage.getItem('seenAirdrops');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
 
   useEffect(() => {
     // Check if user is logged in
@@ -36,6 +43,52 @@ const Dashboard = () => {
       navigate('/login');
     }
   }, [navigate]);
+
+  // Check for new airdrops and send notifications
+  useEffect(() => {
+    const checkForNewAirdrops = () => {
+      const newAirdrops = mockAirdrops.filter(airdrop => !seenAirdrops.has(airdrop.id));
+      
+      if (newAirdrops.length > 0) {
+        // Add to seen airdrops
+        const updatedSeenAirdrops = new Set(seenAirdrops);
+        newAirdrops.forEach(airdrop => {
+          updatedSeenAirdrops.add(airdrop.id);
+          
+          // Send notification for each new airdrop
+          addNotification({
+            title: `New Airdrop: ${airdrop.name}`,
+            message: `A new ${airdrop.blockchain} ${airdrop.type} airdrop is available!`,
+            airdropId: airdrop.id
+          });
+        });
+        
+        setSeenAirdrops(updatedSeenAirdrops);
+        localStorage.setItem('seenAirdrops', JSON.stringify([...updatedSeenAirdrops]));
+        
+        // Show toast for new airdrops
+        if (newAirdrops.length === 1) {
+          toast({
+            title: "New Airdrop Available",
+            description: `${newAirdrops[0].name} has been added to the list.`,
+          });
+        } else {
+          toast({
+            title: "New Airdrops Available",
+            description: `${newAirdrops.length} new airdrops have been added to the list.`,
+          });
+        }
+      }
+    };
+    
+    // Check on component mount
+    checkForNewAirdrops();
+    
+    // Simulate polling for new airdrops every minute
+    // In a real app, this would be a WebSocket or server-sent events
+    const interval = setInterval(checkForNewAirdrops, 60000);
+    return () => clearInterval(interval);
+  }, [seenAirdrops, addNotification, toast]);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -70,6 +123,28 @@ const Dashboard = () => {
             <p className="text-center text-muted-foreground mt-2 mb-10">
               Discover and track the most promising crypto airdrops
             </p>
+            
+            {/* Display upcoming airdrops with calendar integration */}
+            <div className="mb-8">
+              <h3 className="text-xl font-medium mb-4">Upcoming Airdrops</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {mockAirdrops
+                  .filter(airdrop => airdrop.status === 'Upcoming')
+                  .slice(0, 3)
+                  .map(airdrop => (
+                    <div key={airdrop.id} className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                      <div className="flex items-center gap-3">
+                        <img src={airdrop.logo} alt={airdrop.name} className="w-10 h-10 rounded-full" />
+                        <div>
+                          <h4 className="font-medium">{airdrop.name}</h4>
+                          <p className="text-sm text-muted-foreground">{airdrop.tokenSymbol}</p>
+                        </div>
+                      </div>
+                      <AirdropCardCalendar airdrop={airdrop} />
+                    </div>
+                  ))}
+              </div>
+            </div>
           </div>
           
           <Filters filters={filters} setFilters={setFilters} />
