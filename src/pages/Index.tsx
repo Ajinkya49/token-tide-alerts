@@ -8,7 +8,6 @@ import AirdropGrid from '../components/AirdropGrid';
 import { mockAirdrops } from '../utils/mockData';
 import { FilterOptions } from '../utils/types';
 import { Button } from '@/components/ui/button';
-import { Input } from "@/components/ui/input";
 
 const Index = () => {
   const [filters, setFilters] = useState<FilterOptions>({
@@ -16,7 +15,6 @@ const Index = () => {
     status: 'All',
     type: 'All',
     requiresKYC: 'All',
-    searchQuery: '',
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -25,29 +23,12 @@ const Index = () => {
     setIsAuthenticated(!!user);
   }, []);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({ ...prev, searchQuery: e.target.value }));
-  };
-
   return (
     <div className="min-h-screen bg-background app-gradient">
       <Navbar />
       
       <main>
         <Hero />
-        
-        {/* Main Search Bar */}
-        <div className="max-w-3xl mx-auto -mt-6 mb-8 px-6 relative z-10">
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-lg shadow-lg p-4">
-            <Input
-              type="text"
-              placeholder="Search airdrops by name, description, token symbol..."
-              className="glass-input text-lg"
-              value={filters.searchQuery || ''}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </div>
         
         <section id="airdrops" className="py-10">
           <div className="max-w-7xl mx-auto px-6 mb-8">

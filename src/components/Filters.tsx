@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { blockchains } from '../utils/mockData';
 import { AirdropStatus, AirdropType, FilterOptions, FundingRange } from '../utils/types';
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface FiltersProps {
@@ -39,6 +40,10 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
     setFilters(prev => ({ ...prev, fundingRange: range as FundingRange }));
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters(prev => ({ ...prev, searchQuery: e.target.value }));
+  };
+
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
@@ -48,6 +53,16 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
       <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
           <h3 className="text-lg font-medium">Filter Airdrops</h3>
+          
+          <div className="w-full md:w-1/3">
+            <Input
+              type="text"
+              placeholder="Search airdrops..."
+              className="glass-input"
+              value={filters.searchQuery || ''}
+              onChange={handleSearchChange}
+            />
+          </div>
           
           <button
             onClick={toggleExpanded}

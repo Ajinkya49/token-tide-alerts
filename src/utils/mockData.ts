@@ -1,3 +1,4 @@
+
 import { Airdrop, BlockchainType } from './types';
 
 export const blockchains: BlockchainType[] = [
@@ -777,7 +778,7 @@ export const mockAirdrops: Airdrop[] = [
     fundingRound: 'Series A',
     steps: [
       'Bridge assets to Starknet',
-      'Use DeFi protocols on Starknet',
+      'Use DeFi protocols on Starknet', 
       'Interact with dApps in the ecosystem'
     ]
   },
@@ -831,4 +832,23 @@ export const mockAirdrops: Airdrop[] = [
     description: 'Decentralized, Ethereum-equivalent ZK-Rollup',
     logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
     blockchain: 'Ethereum',
-    tokenSymbol: 'TA
+    tokenSymbol: 'TAIKO',
+    estimatedValue: '$50-300',
+    startDate: '2024-01-15',
+    endDate: '2024-07-15',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://taiko.xyz',
+    fundingAmount: '$15M',
+    fundingRound: 'Seed',
+    steps: [
+      'Bridge assets to Taiko testnet',
+      'Perform transactions on the network',
+      'Test dApps in their ecosystem',
+      'Provide feedback and report bugs'
+    ]
+  }
+];
