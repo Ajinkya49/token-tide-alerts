@@ -4,39 +4,53 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "../components/Logo";
+import { useAuth } from "../components/AuthProvider";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate authentication - in a real app, this would call an API
-    setTimeout(() => {
+    try {
       // Simple validation
-      if (email && password) {
-        // Store user info in localStorage
-        localStorage.setItem('user', JSON.stringify({ email }));
-        toast({
-          title: "Success!",
-          description: "You have successfully logged in.",
-        });
-        navigate("/dashboard");
-      } else {
+      if (!email || !password) {
         toast({
           title: "Error",
           description: "Please enter both email and password.",
           variant: "destructive",
         });
+        setIsLoading(false);
+        return;
       }
+
+      // Call the login function from the auth context
+      await login(email, password, rememberMe);
+      
+      toast({
+        title: "Success!",
+        description: "You have successfully logged in.",
+      });
+      
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log in. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -82,6 +96,20 @@ const Login = () => {
               required
               className="glass-input"
             />
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="remember" 
+              checked={rememberMe} 
+              onCheckedChange={(checked) => setRememberMe(checked === true)}
+            />
+            <label
+              htmlFor="remember"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Remember me
+            </label>
           </div>
           
           <Button 

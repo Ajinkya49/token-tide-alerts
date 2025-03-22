@@ -4,17 +4,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "../components/Logo";
+import { useAuth } from "../components/AuthProvider";
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -39,10 +43,13 @@ const Signup = () => {
       return;
     }
 
-    // Simulate account creation - in a real app, this would call an API
-    setTimeout(() => {
-      // Store user info in localStorage
-      localStorage.setItem('user', JSON.stringify({ email }));
+    try {
+      // In a real app, you would call an API to create the account first
+      // Simulate account creation delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Then login the user
+      await login(email, password, rememberMe);
       
       toast({
         title: "Account created!",
@@ -50,8 +57,15 @@ const Signup = () => {
       });
       
       navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create account. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -107,6 +121,20 @@ const Signup = () => {
               required
               className="glass-input"
             />
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="remember" 
+              checked={rememberMe} 
+              onCheckedChange={(checked) => setRememberMe(checked === true)}
+            />
+            <label
+              htmlFor="remember"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Remember me
+            </label>
           </div>
           
           <Button 
