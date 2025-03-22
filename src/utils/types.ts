@@ -35,6 +35,7 @@ export interface Airdrop {
   steps?: string[];
   fundingAmount?: string; // Funding amount field
   fundingRound?: string; // Funding round field
+  videoUrl?: string; // YouTube tutorial URL
 }
 
 export interface FilterOptions {

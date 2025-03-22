@@ -34,6 +34,17 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
     }
   };
 
+  // Extract YouTube video ID from URL
+  const getYoutubeVideoId = (url?: string) => {
+    if (!url) return null;
+    
+    // Handle various YouTube URL formats
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
   return (
     <div className="card-gradient rounded-xl overflow-hidden transition-all duration-300">
       <div className="p-6">
@@ -108,15 +119,35 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
           )}
         </div>
         
-        {isExpanded && airdrop.steps && airdrop.steps.length > 0 && (
-          <div className="mb-4">
-            <h4 className="text-sm font-medium mb-2">How to participate:</h4>
-            <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
-              {airdrop.steps.map((step, idx) => (
-                <li key={idx}>{step}</li>
-              ))}
-            </ul>
-          </div>
+        {isExpanded && (
+          <>
+            {airdrop.steps && airdrop.steps.length > 0 && (
+              <div className="mb-4">
+                <h4 className="text-sm font-medium mb-2">How to participate:</h4>
+                <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+                  {airdrop.steps.map((step, idx) => (
+                    <li key={idx}>{step}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {airdrop.videoUrl && getYoutubeVideoId(airdrop.videoUrl) && (
+              <div className="mb-4">
+                <h4 className="text-sm font-medium mb-2">Video Tutorial:</h4>
+                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                  <iframe 
+                    src={`https://www.youtube.com/embed/${getYoutubeVideoId(airdrop.videoUrl)}`}
+                    title={`${airdrop.name} tutorial video`}
+                    className="absolute top-0 left-0 w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            )}
+          </>
         )}
         
         <div className="flex justify-between items-center">
