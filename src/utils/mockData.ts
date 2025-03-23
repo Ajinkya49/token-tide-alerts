@@ -1,3 +1,4 @@
+
 import { Airdrop, BlockchainType } from './types';
 
 export const blockchains: BlockchainType[] = [
@@ -824,4 +825,58 @@ export const mockAirdrops: Airdrop[] = [
     requiresKYC: false,
     link: 'https://linea.build',
     fundingAmount: 'Unknown',
-    fundingRound: 'Backed by Cons
+    fundingRound: 'Backed by ConsenSys',
+    steps: [
+      'Bridge ETH to Linea',
+      'Use dApps on Linea',
+      'Engage with Linea ecosystem'
+    ]
+  },
+  {
+    id: '35',
+    name: 'Scroll',
+    description: 'Layer-2 zkEVM scaling solution for Ethereum',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'SCROLL',
+    estimatedValue: '$50-300',
+    startDate: '2023-10-19',
+    endDate: '2024-10-19',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    link: 'https://scroll.io',
+    fundingAmount: '$80M',
+    fundingRound: 'Series A',
+    steps: [
+      'Bridge assets to Scroll',
+      'Complete transactions on Scroll',
+      'Use dApps in the ecosystem'
+    ]
+  },
+  {
+    id: '36',
+    name: 'Taiko',
+    description: 'Decentralized, Ethereum-equivalent ZK-Rollup',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'TAIKO',
+    estimatedValue: '$50-300',
+    startDate: '2024-01-15',
+    endDate: '2024-07-15',
+    status: 'Active',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://taiko.xyz',
+    fundingAmount: '$15M',
+    fundingRound: 'Seed',
+    steps: [
+      'Bridge assets to Taiko testnet',
+      'Perform transactions on the network',
+      'Test dApps in their ecosystem',
+      'Provide feedback and report bugs'
+    ]
+  }
+];
