@@ -4,7 +4,7 @@ import { Calendar, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Airdrop } from '@/utils/types';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface CalendarButtonProps {
   airdrop: Airdrop;

@@ -2,6 +2,7 @@
 import { Airdrop } from '../utils/types';
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
+import CalendarButton from './CalendarButton';
 
 interface AirdropCardProps {
   airdrop: Airdrop;
@@ -64,10 +65,13 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="flex items-center">
             <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadge(airdrop.status)}`}>
               {airdrop.status}
             </span>
+            {(airdrop.status === 'Active' || airdrop.status === 'Upcoming') && (
+              <CalendarButton airdrop={airdrop} />
+            )}
           </div>
         </div>
         
