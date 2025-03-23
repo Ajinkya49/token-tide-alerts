@@ -9,6 +9,8 @@ interface Notification {
   timestamp: Date;
   read: boolean;
   airdropId?: string;
+  type?: 'wallet' | 'task' | 'airdrop' | 'system';
+  actionUrl?: string;
 }
 
 interface NotificationContextType {
@@ -51,7 +53,8 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
       ...notification,
       id: `notification-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
       timestamp: new Date(),
-      read: false
+      read: false,
+      type: notification.type || 'system'
     };
     
     setNotifications(prev => [newNotification, ...prev]);

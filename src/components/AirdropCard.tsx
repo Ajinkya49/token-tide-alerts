@@ -1,8 +1,8 @@
-
 import { Airdrop } from '../utils/types';
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import CalendarButton from './CalendarButton';
+import AirdropTasks from './AirdropTasks';
 
 interface AirdropCardProps {
   airdrop: Airdrop;
@@ -123,21 +123,15 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
           )}
         </div>
         
+        {/* Always show tasks if they exist - integrated task automation */}
+        {airdrop.steps && airdrop.steps.length > 0 && airdrop.status !== 'Ended' && (
+          <AirdropTasks airdrop={airdrop} />
+        )}
+        
         {isExpanded && (
           <>
-            {airdrop.steps && airdrop.steps.length > 0 && (
-              <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2">How to participate:</h4>
-                <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
-                  {airdrop.steps.map((step, idx) => (
-                    <li key={idx}>{step}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
             {airdrop.videoUrl && getYoutubeVideoId(airdrop.videoUrl) && (
-              <div className="mb-4">
+              <div className="mb-4 mt-4">
                 <h4 className="text-sm font-medium mb-2">Video Tutorial:</h4>
                 <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
                   <iframe 
@@ -154,7 +148,7 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
           </>
         )}
         
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mt-4">
           <Button 
             variant="outline" 
             size="sm"
