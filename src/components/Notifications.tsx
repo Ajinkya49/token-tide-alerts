@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, BellDot, Check, Calendar, Trash2, Wallet, CheckCircle2 } from 'lucide-react';
+import { Bell, BellDot, Check, Calendar, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNotifications } from './NotificationProvider';
 import { Button } from '@/components/ui/button';
@@ -22,15 +22,11 @@ export const Notifications = () => {
   const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotifications } = useNotifications();
   const [open, setOpen] = useState(false);
   
-  const handleNotificationClick = (id: string, airdropId?: string, actionUrl?: string) => {
+  const handleNotificationClick = (id: string, airdropId?: string) => {
     markAsRead(id);
     setOpen(false);
     
-    if (actionUrl) {
-      // Navigate to the action URL if provided
-      window.open(actionUrl, '_blank');
-    }
-    else if (airdropId) {
+    if (airdropId) {
       // Navigate to the airdrop details (we could implement this in the future)
       // For now, just scroll to the airdrops section
       navigate('/dashboard');
@@ -40,20 +36,6 @@ export const Notifications = () => {
           airdropsSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
-    }
-  };
-
-  // Get notification icon based on type
-  const getNotificationIcon = (type?: string) => {
-    switch (type) {
-      case 'wallet':
-        return <Wallet className="h-4 w-4 mr-2 text-blue-500" />;
-      case 'task':
-        return <CheckCircle2 className="h-4 w-4 mr-2 text-green-500" />;
-      case 'airdrop':
-        return <Calendar className="h-4 w-4 mr-2 text-purple-500" />;
-      default:
-        return <Bell className="h-4 w-4 mr-2 text-muted-foreground" />;
     }
   };
 
@@ -113,13 +95,10 @@ export const Notifications = () => {
                 <DropdownMenuItem
                   key={notification.id}
                   className={`p-3 cursor-pointer ${!notification.read ? 'bg-accent/30' : ''}`}
-                  onClick={() => handleNotificationClick(notification.id, notification.airdropId, notification.actionUrl)}
+                  onClick={() => handleNotificationClick(notification.id, notification.airdropId)}
                 >
-                  <div className="flex flex-col gap-1 w-full">
-                    <div className="font-medium flex items-center">
-                      {getNotificationIcon(notification.type)}
-                      {notification.title}
-                    </div>
+                  <div className="flex flex-col gap-1">
+                    <div className="font-medium">{notification.title}</div>
                     <div className="text-sm text-muted-foreground">{notification.message}</div>
                     <div className="text-xs text-muted-foreground mt-1">
                       {format(notification.timestamp, 'MMM d, yyyy - h:mm a')}
