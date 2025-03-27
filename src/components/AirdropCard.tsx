@@ -9,8 +9,6 @@ interface AirdropCardProps {
 }
 
 const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  
   // Format date to readable string
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -123,46 +121,34 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
           )}
         </div>
         
-        {isExpanded && (
-          <>
-            {airdrop.steps && airdrop.steps.length > 0 && (
-              <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2">How to participate:</h4>
-                <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
-                  {airdrop.steps.map((step, idx) => (
-                    <li key={idx}>{step}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {airdrop.videoUrl && getYoutubeVideoId(airdrop.videoUrl) && (
-              <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2">Video Tutorial:</h4>
-                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
-                  <iframe 
-                    src={`https://www.youtube.com/embed/${getYoutubeVideoId(airdrop.videoUrl)}`}
-                    title={`${airdrop.name} tutorial video`}
-                    className="absolute top-0 left-0 w-full h-full"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-            )}
-          </>
+        {airdrop.steps && airdrop.steps.length > 0 && (
+          <div className="mb-4">
+            <h4 className="text-sm font-medium mb-2">How to participate:</h4>
+            <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+              {airdrop.steps.map((step, idx) => (
+                <li key={idx}>{step}</li>
+              ))}
+            </ul>
+          </div>
         )}
         
-        <div className="flex justify-between items-center">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? 'Show less' : 'Show more'}
-          </Button>
-          
+        {airdrop.videoUrl && getYoutubeVideoId(airdrop.videoUrl) && (
+          <div className="mb-4">
+            <h4 className="text-sm font-medium mb-2">Video Tutorial:</h4>
+            <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+              <iframe 
+                src={`https://www.youtube.com/embed/${getYoutubeVideoId(airdrop.videoUrl)}`}
+                title={`${airdrop.name} tutorial video`}
+                className="absolute top-0 left-0 w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        )}
+        
+        <div className="flex justify-end items-center">          
           <Button asChild>
             <a href={airdrop.link} target="_blank" rel="noopener noreferrer">
               Participate
