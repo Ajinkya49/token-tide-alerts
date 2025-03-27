@@ -1,4 +1,3 @@
-
 import { Airdrop, BlockchainType } from './types';
 
 export const blockchains: BlockchainType[] = [
@@ -14,7 +13,84 @@ export const blockchains: BlockchainType[] = [
 ];
 
 export const mockAirdrops: Airdrop[] = [
-  // Add the Grass airdrop at the beginning of the array
+  // Add new airdrops at the beginning of the array
+  {
+    id: '38',
+    name: 'Orderly Network',
+    description: 'A decentralized trading infrastructure for Web3 applications, providing order matching, liquidity, and settlement services.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Near',
+    tokenSymbol: 'ORDERLY',
+    estimatedValue: '$50-300',
+    startDate: '2024-06-10',
+    endDate: '2024-12-10',
+    status: 'Upcoming',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: true,
+    link: 'https://orderly.network',
+    fundingAmount: '$20M',
+    fundingRound: 'Series A',
+    steps: [
+      'Create an account on Orderly Network',
+      'Connect your Near wallet',
+      'Complete at least 3 trades',
+      'Maintain a minimum balance',
+      'Engage with the community'
+    ]
+  },
+  {
+    id: '39',
+    name: 'Ethena',
+    description: 'A synthetic dollar protocol building a new stablecoin (USDe) backed by delta-neutral ETH positions.',
+    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'ENA',
+    estimatedValue: '$100-500',
+    startDate: '2024-06-15',
+    endDate: '2024-12-15',
+    status: 'Upcoming',
+    type: 'Token',
+    requiresKYC: false,
+    requiresTwitter: true,
+    requiresDiscord: false,
+    link: 'https://ethena.fi',
+    fundingAmount: '$60M',
+    fundingRound: 'Series B',
+    steps: [
+      'Mint USDe stablecoins',
+      'Stake USDe for at least 30 days',
+      'Participate in governance proposals',
+      'Hold a minimum balance until snapshot'
+    ]
+  },
+  {
+    id: '40',
+    name: 'Aave V4',
+    description: 'The next major version of the leading DeFi lending protocol, featuring improved capital efficiency and new features.',
+    logo: 'https://cryptologos.cc/logos/aave-aave-logo.png',
+    blockchain: 'Ethereum',
+    tokenSymbol: 'AAVE',
+    estimatedValue: '$200-1000',
+    startDate: '2024-07-01',
+    endDate: '2024-12-31',
+    status: 'Upcoming',
+    type: 'Governance',
+    requiresKYC: false,
+    requiresTwitter: false,
+    requiresDiscord: false,
+    link: 'https://aave.com',
+    fundingAmount: '$300M',
+    fundingRound: 'Established',
+    steps: [
+      'Supply assets to Aave V4 markets',
+      'Borrow against your collateral',
+      'Participate in governance votes',
+      'Maintain positions for minimum duration'
+    ]
+  },
+  // Grass airdrop at the beginning of the array
   {
     id: '37',
     name: 'Grass Season 2',
