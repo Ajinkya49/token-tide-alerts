@@ -10,7 +10,7 @@ const Hero = () => {
           <p className="text-lg md:text-xl opacity-90 max-w-md">Stay ahead with TokenTide's curated list of the most promising airdrops, complete with funding information provided by Ajinkya Kamble </p>
           <div className="flex flex-wrap gap-4">
             <Button size="lg" className="bg-white hover:bg-white/90 text-primary" asChild>
-              <Link to="/signup">Get Started</Link>
+              <Link to="/signup" className="make it clear\n">Get Started</Link>
             </Button>
             <Button size="lg" variant="outline" className="bg-transparent border-white hover:bg-white/10" asChild>
               <a href="#airdrops">Explore Airdrops</a>
