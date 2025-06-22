@@ -99,6 +99,27 @@
   .dark body {
     @apply bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800;
   }
+
+  /* Custom text selection colors */
+  ::selection {
+    background-color: rgba(139, 92, 246, 0.3);
+    color: rgb(15, 23, 42);
+  }
+
+  ::-moz-selection {
+    background-color: rgba(139, 92, 246, 0.3);
+    color: rgb(15, 23, 42);
+  }
+
+  .dark ::selection {
+    background-color: rgba(168, 85, 247, 0.4);
+    color: rgb(248, 250, 252);
+  }
+
+  .dark ::-moz-selection {
+    background-color: rgba(168, 85, 247, 0.4);
+    color: rgb(248, 250, 252);
+  }
 }
 
 /* Modern animations and effects */
