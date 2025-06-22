@@ -214,7 +214,7 @@
 }
 
 .feature-card {
-  @apply modern-card p-8 group hover:scale-105;
+  @apply modern-card p-8 hover:scale-105;
 }
 
 /* Smooth transitions */

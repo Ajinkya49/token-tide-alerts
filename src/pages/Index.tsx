@@ -54,7 +54,7 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="feature-card">
+              <div className="feature-card group">
                 <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-glow">
                   <Shield className="w-7 h-7 text-white" />
                 </div>
@@ -62,7 +62,7 @@ const Index = () => {
                 <p className="text-slate-600 dark:text-slate-300">Every project is thoroughly vetted by our expert team to ensure legitimacy and security.</p>
               </div>
 
-              <div className="feature-card animation-delay-200">
+              <div className="feature-card group animation-delay-200">
                 <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-glow">
                   <Clock className="w-7 h-7 text-white" />
                 </div>
@@ -70,7 +70,7 @@ const Index = () => {
                 <p className="text-slate-600 dark:text-slate-300">Get instant notifications when new airdrops go live or when deadlines approach.</p>
               </div>
 
-              <div className="feature-card animation-delay-400">
+              <div className="feature-card group animation-delay-400">
                 <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-glow">
                   <TrendingUp className="w-7 h-7 text-white" />
                 </div>
@@ -124,9 +124,10 @@ const Index = () => {
       </main>
       
       <footer className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white py-16 relative overflow-hidden">
-        {/* Background decorations */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23FFFFFF\" fill-opacity=\"0.03\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+          <div className="absolute top-0 left-0 w-full h-full opacity-50" style={{
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+          }}></div>
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-10 -right-10 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
         </div>
