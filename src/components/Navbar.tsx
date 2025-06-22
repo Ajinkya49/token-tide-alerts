@@ -56,8 +56,8 @@ const Navbar = () => {
 
   return (
     <header className={cn(
-      "sticky top-0 z-50 w-full backdrop-blur-lg transition-all",
-      scrolled ? "border-b shadow-sm" : "bg-transparent"
+      "sticky top-0 z-50 w-full transition-all duration-300",
+      scrolled ? "glass-navbar shadow-lg shadow-purple-500/10" : "bg-transparent"
     )}>
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-2">
@@ -67,8 +67,10 @@ const Navbar = () => {
               <NavigationMenuItem>
                 <Link to="/">
                   <NavigationMenuLink
-                    className={navigationMenuTriggerStyle({ className: "bg-transparent" })}
-                    active={location.pathname === "/"}
+                    className={cn(
+                      navigationMenuTriggerStyle({ className: "bg-transparent hover:bg-purple-100/50 dark:hover:bg-purple-900/50" }),
+                      location.pathname === "/" && "text-purple-600 dark:text-purple-400"
+                    )}
                   >
                     Home
                   </NavigationMenuLink>
@@ -78,8 +80,10 @@ const Navbar = () => {
                 <NavigationMenuItem>
                   <Link to="/dashboard">
                     <NavigationMenuLink
-                      className={navigationMenuTriggerStyle({ className: "bg-transparent" })}
-                      active={location.pathname === "/dashboard"}
+                      className={cn(
+                        navigationMenuTriggerStyle({ className: "bg-transparent hover:bg-purple-100/50 dark:hover:bg-purple-900/50" }),
+                        location.pathname === "/dashboard" && "text-purple-600 dark:text-purple-400"
+                      )}
                     >
                       Dashboard
                     </NavigationMenuLink>
@@ -95,11 +99,11 @@ const Navbar = () => {
             <Input
               type="search"
               placeholder="Search airdrops..."
-              className="w-[200px] lg:w-[300px] bg-background/30"
+              className="w-[200px] lg:w-[300px] glass-input"
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            <Button size="icon" variant="ghost" className="absolute right-0" type="submit">
+            <Button size="icon" variant="ghost" className="absolute right-0 hover:bg-purple-100/50 dark:hover:bg-purple-900/50" type="submit">
               <Search className="h-5 w-5" />
             </Button>
           </form>
@@ -108,7 +112,7 @@ const Navbar = () => {
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:bg-purple-100/50 dark:hover:bg-purple-900/50">
                 {theme === 'dark' ? (
                   <SunIcon className="h-5 w-5" />
                 ) : (
@@ -116,7 +120,7 @@ const Navbar = () => {
                 )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="glass-card">
               <DropdownMenuItem onClick={toggleTheme}>
                 {theme === 'dark' ? 'Light mode' : 'Dark mode'}
               </DropdownMenuItem>
@@ -126,10 +130,10 @@ const Navbar = () => {
           {!user && (
             <div className="flex items-center gap-2">
               <Link to="/login">
-                <Button variant="ghost">Login</Button>
+                <Button variant="ghost" className="hover:bg-purple-100/50 dark:hover:bg-purple-900/50">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button variant="default">Signup</Button>
+                <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300">Signup</Button>
               </Link>
             </div>
           )}
