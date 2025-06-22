@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -95,21 +96,43 @@
   }
 }
 
-/* Custom styles */
-.glass {
-  @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-md;
+/* Modern animations and effects */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.glass-card {
-  @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-md shadow-lg border border-white/20 dark:border-gray-800/20;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }  
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-.glass-input {
-  @apply bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border border-white/20 dark:border-gray-800/20;
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.6);
+  }
 }
 
-.text-balance {
-  text-wrap: balance;
+/* Animation utilities */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 /* Animation delays */
@@ -133,31 +156,65 @@
   animation-delay: 500ms;
 }
 
+/* Glass effects */
+.glass {
+  @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-md;
+}
+
+.glass-card {
+  @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-md shadow-lg border border-white/20 dark:border-gray-800/20;
+}
+
+.glass-input {
+  @apply bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border border-white/20 dark:border-gray-800/20;
+}
+
+/* Modern gradients */
+.gradient-text {
+  @apply bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent;
+}
+
+.gradient-border {
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #a855f7, #ec4899, #3b82f6) border-box;
+  border: 2px solid transparent;
+}
+
+/* Modern card styles */
+.modern-card {
+  @apply bg-white rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1;
+}
+
+.dark .modern-card {
+  @apply bg-gray-800 border-gray-700;
+}
+
 /* Smooth transitions */
 .page-transition {
   @apply transition-all duration-300 ease-in-out;
 }
 
-/* Custom card and button styles */
-.airdrop-card {
-  @apply transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.primary-button {
-  @apply bg-accent hover:bg-accent/90 text-white font-medium px-4 py-2 rounded-md transition-all;
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
-.secondary-button {
-  @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium px-4 py-2 rounded-md transition-all;
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Remove old styles that conflict */
+.hero-gradient,
+.card-gradient,
+.app-gradient {
+  /* Reset these to use new Tailwind classes */
 }

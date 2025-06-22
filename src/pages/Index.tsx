@@ -8,6 +8,7 @@ import AirdropGrid from '../components/AirdropGrid';
 import { mockAirdrops } from '../utils/mockData';
 import { FilterOptions } from '../utils/types';
 import { Button } from '@/components/ui/button';
+import { Sparkles, Shield, Clock, Users, TrendingUp, Zap } from 'lucide-react';
 
 const Index = () => {
   const [filters, setFilters] = useState<FilterOptions>({
@@ -24,31 +25,84 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background app-gradient">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
       
       <main>
         <Hero />
         
-        <section id="airdrops" className="py-10">
+        {/* Features Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Why Choose TokenTide?
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Join thousands of crypto enthusiasts who trust us to find the most valuable airdrops
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="group p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Verified Projects</h3>
+                <p className="text-gray-600">Every project is thoroughly vetted by our expert team to ensure legitimacy and security.</p>
+              </div>
+
+              <div className="group p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Clock className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Real-Time Updates</h3>
+                <p className="text-gray-600">Get instant notifications when new airdrops go live or when deadlines approach.</p>
+              </div>
+
+              <div className="group p-8 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <TrendingUp className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">High Success Rate</h3>
+                <p className="text-gray-600">Our curated selection focuses on projects with strong fundamentals and funding.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Airdrops Section */}
+        <section id="airdrops" className="py-20 bg-gradient-to-br from-slate-50 to-gray-100">
           <div className="max-w-7xl mx-auto px-6 mb-8">
-            <h2 className="text-3xl font-bold text-center">Latest Airdrops</h2>
-            <p className="text-center text-muted-foreground mt-2 mb-10">
-              Discover and track the most promising crypto airdrops
-            </p>
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                Latest Opportunities
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Trending Airdrops</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Discover and track the most promising crypto airdrops with detailed funding information
+              </p>
+            </div>
             
             {!isAuthenticated && (
-              <div className="card-gradient rounded-lg p-6 mb-10 flex flex-col md:flex-row items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Unlock Full Access</h3>
-                  <p className="text-muted-foreground max-w-md">
-                    Sign up to save your favorite airdrops, get notifications, and access exclusive features.
-                  </p>
-                </div>
-                <div className="mt-6 md:mt-0">
-                  <Button asChild>
-                    <Link to="/signup">Sign up for free</Link>
-                  </Button>
+              <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl p-8 mb-12 text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between">
+                  <div className="mb-6 lg:mb-0">
+                    <h3 className="text-2xl font-bold mb-3">🚀 Unlock Premium Features</h3>
+                    <p className="text-white/90 max-w-md text-lg">
+                      Get exclusive access to premium airdrops, calendar sync, and personalized notifications.
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button asChild className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 rounded-full font-semibold shadow-lg">
+                      <Link to="/signup">
+                        <Zap className="w-4 h-4 mr-2" />
+                        Sign Up Free
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
@@ -59,93 +113,60 @@ const Index = () => {
         </section>
       </main>
       
-      <footer className="bg-card py-10 border-t border-border">
+      <footer className="bg-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <div className="flex items-center gap-2">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="w-5 h-5 text-accent"
-                >
-                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-                </svg>
-                <span className="text-xl font-medium">TokenTide</span>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-2xl font-bold">TokenTide</span>
               </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                Stay ahead of the crypto curve
+              <p className="text-gray-400 mb-6 max-w-md text-lg">
+                Your gateway to the most promising crypto airdrops. Stay ahead of the curve with curated opportunities.
               </p>
+              <div className="flex space-x-4">
+                {['twitter', 'facebook', 'instagram', 'youtube'].map((social) => (
+                  <a key={social} href="#" className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors">
+                    <div className="w-5 h-5 bg-current"></div>
+                  </a>
+                ))}
+              </div>
             </div>
             
-            <div className="flex space-x-6">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="w-5 h-5"
-                >
-                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
-                </svg>
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="w-5 h-5"
-                >
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                </svg>
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="w-5 h-5"
-                >
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                </svg>
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="w-5 h-5"
-                >
-                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-                  <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-                </svg>
-              </a>
+            <div>
+              <h4 className="font-semibold mb-4">Product</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">Airdrops</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Analytics</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Calendar</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              </ul>
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t border-border">
-            <p className="text-center text-sm text-muted-foreground">
-              © {new Date().getFullYear()} TokenTide. All rights reserved. 
-              <span className="block sm:inline sm:ml-1">Not financial advice. DYOR.</span>
-            </p>
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-gray-400 mb-4 md:mb-0">
+                © {new Date().getFullYear()} TokenTide. All rights reserved. Not financial advice. DYOR.
+              </p>
+              <div className="flex space-x-6 text-gray-400">
+                <a href="#" className="hover:text-white transition-colors">Privacy</a>
+                <a href="#" className="hover:text-white transition-colors">Terms</a>
+                <a href="#" className="hover:text-white transition-colors">Cookies</a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
