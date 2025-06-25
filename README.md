@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Welcome to my crypto airdrops alert app project
 
 ## Project info
 
