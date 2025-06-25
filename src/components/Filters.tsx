@@ -4,6 +4,7 @@ import { blockchains } from '../utils/mockData';
 import { AirdropStatus, AirdropType, FilterOptions, FundingRange } from '../utils/types';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Search, Filter, ChevronDown } from 'lucide-react';
 
 interface FiltersProps {
   filters: FilterOptions;
@@ -50,15 +51,21 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-6 mb-8">
-      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-          <h3 className="text-lg font-medium">Filter Airdrops</h3>
+      <div className="glass-card rounded-2xl p-8 shadow-xl border border-white/20 dark:border-slate-700/30 backdrop-blur-xl bg-white/90 dark:bg-slate-800/90">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+              <Filter className="w-5 h-5 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold gradient-text">Filter Airdrops</h3>
+          </div>
           
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/2 max-w-md relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
             <Input
               type="text"
-              placeholder="Search airdrops..."
-              className="glass-input"
+              placeholder="Search for airdrops, projects, or tokens..."
+              className="pl-12 h-12 bg-white/70 dark:bg-slate-700/70 border-slate-200/50 dark:border-slate-600/50 rounded-xl shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300"
               value={filters.searchQuery || ''}
               onChange={handleSearchChange}
             />
@@ -66,30 +73,22 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
           
           <button
             onClick={toggleExpanded}
-            className="flex items-center text-sm font-medium text-accent hover:text-accent/90 transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20 border border-purple-200/50 dark:border-purple-700/50 rounded-xl text-purple-700 dark:text-purple-300 font-medium transition-all duration-300 hover:scale-105"
           >
-            {isExpanded ? 'Hide Filters' : 'Show All Filters'}
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={`ml-1 w-4 h-4 transition-transform ${
-                isExpanded ? 'rotate-180' : ''
-              }`}
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+            <Filter className="w-4 h-4" />
+            {isExpanded ? 'Hide Filters' : 'More Filters'}
+            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div>
-            <Label className="mb-2 block">Blockchain</Label>
+          <div className="space-y-3">
+            <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              Blockchain
+            </Label>
             <select
-              className="w-full p-2 rounded-md border border-input bg-background"
+              className="w-full h-12 px-4 rounded-xl border border-slate-200/50 dark:border-slate-600/50 bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 font-medium shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300 appearance-none cursor-pointer hover:bg-white/90 dark:hover:bg-slate-700/90"
               value={filters.blockchain}
               onChange={(e) => handleBlockchainChange(e.target.value)}
             >
@@ -102,10 +101,13 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
             </select>
           </div>
 
-          <div>
-            <Label className="mb-2 block">Status</Label>
+          <div className="space-y-3">
+            <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              Status
+            </Label>
             <select
-              className="w-full p-2 rounded-md border border-input bg-background"
+              className="w-full h-12 px-4 rounded-xl border border-slate-200/50 dark:border-slate-600/50 bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 font-medium shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300 appearance-none cursor-pointer hover:bg-white/90 dark:hover:bg-slate-700/90"
               value={filters.status}
               onChange={(e) => handleStatusChange(e.target.value)}
             >
@@ -116,10 +118,13 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
             </select>
           </div>
 
-          <div>
-            <Label className="mb-2 block">Type</Label>
+          <div className="space-y-3">
+            <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              Type
+            </Label>
             <select
-              className="w-full p-2 rounded-md border border-input bg-background"
+              className="w-full h-12 px-4 rounded-xl border border-slate-200/50 dark:border-slate-600/50 bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 font-medium shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300 appearance-none cursor-pointer hover:bg-white/90 dark:hover:bg-slate-700/90"
               value={filters.type}
               onChange={(e) => handleTypeChange(e.target.value)}
             >
@@ -131,10 +136,13 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
             </select>
           </div>
 
-          <div>
-            <Label className="mb-2 block">Requires KYC</Label>
+          <div className="space-y-3">
+            <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              KYC Required
+            </Label>
             <select
-              className="w-full p-2 rounded-md border border-input bg-background"
+              className="w-full h-12 px-4 rounded-xl border border-slate-200/50 dark:border-slate-600/50 bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 font-medium shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300 appearance-none cursor-pointer hover:bg-white/90 dark:hover:bg-slate-700/90"
               value={
                 filters.requiresKYC === true
                   ? 'yes'
@@ -144,17 +152,20 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
               }
               onChange={(e) => handleKYCChange(e.target.value)}
             >
-              <option value="all">All</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="all">All Options</option>
+              <option value="yes">KYC Required</option>
+              <option value="no">No KYC</option>
             </select>
           </div>
           
           {isExpanded && (
-            <div>
-              <Label className="mb-2 block">Funding Range</Label>
+            <div className="space-y-3 lg:col-span-2">
+              <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                Funding Range
+              </Label>
               <select
-                className="w-full p-2 rounded-md border border-input bg-background"
+                className="w-full h-12 px-4 rounded-xl border border-slate-200/50 dark:border-slate-600/50 bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 font-medium shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300 appearance-none cursor-pointer hover:bg-white/90 dark:hover:bg-slate-700/90"
                 value={filters.fundingRange || 'All'}
                 onChange={(e) => handleFundingRangeChange(e.target.value)}
               >
@@ -167,6 +178,21 @@ const Filters: React.FC<FiltersProps> = ({ filters, setFilters }) => {
             </div>
           )}
         </div>
+
+        {isExpanded && (
+          <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-slate-600/50">
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700/50 rounded-lg">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">Advanced filters available</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700/50 rounded-lg">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Real-time filtering</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
