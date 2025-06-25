@@ -1,14 +1,12 @@
 
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Filters from '../components/Filters';
 import AirdropGrid from '../components/AirdropGrid';
 import { mockAirdrops } from '../utils/mockData';
 import { FilterOptions } from '../utils/types';
-import { Button } from '@/components/ui/button';
-import { Sparkles, Shield, Clock, Users, TrendingUp, Zap, Award, Globe } from 'lucide-react';
+import { Sparkles, Shield, Clock, TrendingUp } from 'lucide-react';
 
 const Index = () => {
   const [filters, setFilters] = useState<FilterOptions>({
@@ -17,12 +15,6 @@ const Index = () => {
     type: 'All',
     requiresKYC: 'All',
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    setIsAuthenticated(!!user);
-  }, []);
 
   return (
     <div className="min-h-screen app-gradient">
@@ -94,28 +86,6 @@ const Index = () => {
                 Discover and track the most promising crypto airdrops with detailed funding information
               </p>
             </div>
-            
-            {!isAuthenticated && (
-              <div className="glass-card p-8 mb-12 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600"></div>
-                <div className="flex flex-col lg:flex-row items-center justify-between">
-                  <div className="mb-6 lg:mb-0">
-                    <h3 className="text-2xl font-bold gradient-text mb-3">🚀 Unlock Premium Features</h3>
-                    <p className="text-slate-600 dark:text-slate-300 max-w-md text-lg">
-                      Get exclusive access to premium airdrops, calendar sync, and personalized notifications.
-                    </p>
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300">
-                      <Link to="/signup">
-                        <Zap className="w-4 h-4 mr-2" />
-                        Sign Up Free
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
           
           <Filters filters={filters} setFilters={setFilters} />

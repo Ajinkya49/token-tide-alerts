@@ -19,14 +19,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../components/ThemeProvider";
-import { useAuth } from "../components/AuthProvider";
 import Logo from "./Logo";
-import Notifications from "./Notifications";
 
 const Navbar = () => {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
 
@@ -76,20 +73,18 @@ const Navbar = () => {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              {user && (
-                <NavigationMenuItem>
-                  <Link to="/dashboard">
-                    <NavigationMenuLink
-                      className={cn(
-                        navigationMenuTriggerStyle({ className: "bg-transparent hover:bg-purple-100/50 dark:hover:bg-purple-900/50" }),
-                        location.pathname === "/dashboard" && "text-purple-600 dark:text-purple-400"
-                      )}
-                    >
-                      Dashboard
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              )}
+              <NavigationMenuItem>
+                <Link to="/dashboard">
+                  <NavigationMenuLink
+                    className={cn(
+                      navigationMenuTriggerStyle({ className: "bg-transparent hover:bg-purple-100/50 dark:hover:bg-purple-900/50" }),
+                      location.pathname === "/dashboard" && "text-purple-600 dark:text-purple-400"
+                    )}
+                  >
+                    Dashboard
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -107,8 +102,6 @@ const Navbar = () => {
               <Search className="h-5 w-5" />
             </Button>
           </form>
-
-          {user && <Notifications />}
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -126,17 +119,6 @@ const Navbar = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {!user && (
-            <div className="flex items-center gap-2">
-              <Link to="/login">
-                <Button variant="ghost" className="hover:bg-purple-100/50 dark:hover:bg-purple-900/50">Login</Button>
-              </Link>
-              <Link to="/signup">
-                <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300">Signup</Button>
-              </Link>
-            </div>
-          )}
         </div>
       </div>
     </header>
