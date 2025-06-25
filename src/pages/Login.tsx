@@ -54,80 +54,110 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen app-gradient flex items-center justify-center p-4">
-      <div className="w-full max-w-md card-gradient rounded-xl p-8 animate-fade-in">
-        <div className="flex flex-col items-center mb-8">
-          <Logo className="w-12 h-12 mb-4" />
-          <h1 className="text-2xl font-bold">Welcome back</h1>
-          <p className="text-muted-foreground">Sign in to your account</p>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-purple-900 dark:to-indigo-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
         </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="glass-input"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <a href="#" className="text-xs text-accent hover:underline">
-                Forgot password?
-              </a>
+
+        <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-slate-700/30 animate-fade-in">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+              <Logo className="w-8 h-8 text-white" />
             </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="glass-input"
-            />
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+              Welcome back
+            </h1>
+            <p className="text-slate-600 dark:text-slate-300 text-center">
+              Sign in to your account to continue
+            </p>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="remember" 
-              checked={rememberMe} 
-              onCheckedChange={(checked) => setRememberMe(checked === true)}
-            />
-            <label
-              htmlFor="remember"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                Email Address
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-12 bg-white/70 dark:bg-slate-700/70 border border-slate-200/50 dark:border-slate-600/50 rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                  Password
+                </label>
+                <Link 
+                  to="#" 
+                  className="text-xs text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 hover:underline transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="h-12 bg-white/70 dark:bg-slate-700/70 border border-slate-200/50 dark:border-slate-600/50 rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all duration-300"
+              />
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <Checkbox 
+                id="remember" 
+                checked={rememberMe} 
+                onCheckedChange={(checked) => setRememberMe(checked === true)}
+                className="border-slate-300 dark:border-slate-600"
+              />
+              <label
+                htmlFor="remember"
+                className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-none cursor-pointer"
+              >
+                Remember me for 30 days
+              </label>
+            </div>
+            
+            <Button 
+              type="submit" 
+              className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]" 
+              disabled={isLoading}
             >
-              Remember me
-            </label>
-          </div>
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Signing in...
+                </div>
+              ) : (
+                "Sign in"
+              )}
+            </Button>
+          </form>
           
-          <Button 
-            type="submit" 
-            className="w-full" 
-            disabled={isLoading}
-          >
-            {isLoading ? "Signing in..." : "Sign in"}
-          </Button>
-        </form>
-        
-        <div className="mt-6 text-center text-sm">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-accent hover:underline">
-              Sign up
-            </Link>
-          </p>
+          <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-slate-600/50">
+            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+              Don't have an account?{" "}
+              <Link 
+                to="/signup" 
+                className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold hover:underline transition-colors"
+              >
+                Create one now
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
