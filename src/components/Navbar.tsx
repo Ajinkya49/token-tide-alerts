@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MoonIcon, SunIcon, Search } from 'lucide-react';
@@ -11,12 +10,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../components/ThemeProvider";
 import Logo from "./Logo";
@@ -49,12 +42,6 @@ const Navbar = () => {
     e.preventDefault();
     // Handle search submission
     console.log("Search for:", searchQuery);
-  };
-
-  const setLightMode = () => {
-    if (theme === 'dark') {
-      toggleTheme();
-    }
   };
 
   return (
@@ -109,33 +96,25 @@ const Navbar = () => {
             </Button>
           </form>
           
-          {/* Direct Light Mode Button */}
+          {/* Single Theme Toggle Button */}
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={setLightMode}
+            onClick={toggleTheme}
             className="hover:bg-purple-100/50 dark:hover:bg-purple-900/50"
           >
-            <SunIcon className="h-4 w-4 mr-2" />
-            Light Mode
+            {theme === 'dark' ? (
+              <>
+                <SunIcon className="h-4 w-4 mr-2" />
+                Light Mode
+              </>
+            ) : (
+              <>
+                <MoonIcon className="h-4 w-4 mr-2" />
+                Dark Mode
+              </>
+            )}
           </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-purple-100/50 dark:hover:bg-purple-900/50">
-                {theme === 'dark' ? (
-                  <SunIcon className="h-5 w-5" />
-                ) : (
-                  <MoonIcon className="h-5 w-5" />
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="glass-card">
-              <DropdownMenuItem onClick={toggleTheme}>
-                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </header>
