@@ -51,6 +51,12 @@ const Navbar = () => {
     console.log("Search for:", searchQuery);
   };
 
+  const setLightMode = () => {
+    if (theme === 'dark') {
+      toggleTheme();
+    }
+  };
+
   return (
     <header className={cn(
       "sticky top-0 z-50 w-full transition-all duration-300",
@@ -102,6 +108,17 @@ const Navbar = () => {
               <Search className="h-5 w-5" />
             </Button>
           </form>
+          
+          {/* Direct Light Mode Button */}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={setLightMode}
+            className="hover:bg-purple-100/50 dark:hover:bg-purple-900/50"
+          >
+            <SunIcon className="h-4 w-4 mr-2" />
+            Light Mode
+          </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
