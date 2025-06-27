@@ -1,46 +1,42 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import AirdropCard from './AirdropCard';
+import AirdropSkeleton from './AirdropSkeleton';
 import { Airdrop, FilterOptions } from '../utils/types';
 
 interface AirdropGridProps {
   airdrops: Airdrop[];
   filters: FilterOptions;
+  isLoading?: boolean;
 }
 
-const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
-  const [filteredAirdrops, setFilteredAirdrops] = useState<Airdrop[]>(airdrops);
+const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters, isLoading = false }) => {
   const [visibleCount, setVisibleCount] = useState(9);
 
-  useEffect(() => {
+  // Sort and filter airdrops
+  const filteredAndSortedAirdrops = useMemo(() => {
     let filtered = [...airdrops];
     
-    // Apply basic filters
+    // Apply filters
     filtered = filtered.filter(airdrop => {
-      // Filter by blockchain
       if (filters.blockchain !== 'All' && airdrop.blockchain !== filters.blockchain) {
         return false;
       }
-
-      // Filter by status
       if (filters.status !== 'All' && airdrop.status !== filters.status) {
         return false;
       }
-
-      // Filter by type
       if (filters.type !== 'All' && airdrop.type !== filters.type) {
         return false;
       }
-
-      // Filter by KYC
       if (filters.requiresKYC !== 'All' && airdrop.requiresKYC !== filters.requiresKYC) {
         return false;
       }
+      if (filters.showBookmarked && !airdrop.isBookmarked) {
+        return false;
+      }
       
-      // Filter by funding range if specified
       if (filters.fundingRange && filters.fundingRange !== 'All') {
         const fundingStr = airdrop.fundingAmount || '0';
-        // Extract number from funding string (e.g. "$100M" -> 100)
         const fundingAmount = parseInt(fundingStr.replace(/[^0-9]/g, '')) || 0;
         
         switch (filters.fundingRange) {
@@ -59,7 +55,6 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
         }
       }
 
-      // Apply search query if exists
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
         return (
@@ -73,21 +68,48 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
       return true;
     });
 
-    setFilteredAirdrops(filtered);
-    // Reset visible count when filters change
-    setVisibleCount(9);
+    // Apply sorting
+    if (filters.sortBy) {
+      filtered.sort((a, b) => {
+        switch (filters.sortBy) {
+          case 'newest':
+            return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+          case 'oldest':
+            return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+          case 'funding-high':
+            const aFunding = parseInt(a.fundingAmount?.replace(/[^0-9]/g, '') || '0');
+            const bFunding = parseInt(b.fundingAmount?.replace(/[^0-9]/g, '') || '0');
+            return bFunding - aFunding;
+          case 'funding-low':
+            const aFundingLow = parseInt(a.fundingAmount?.replace(/[^0-9]/g, '') || '0');
+            const bFundingLow = parseInt(b.fundingAmount?.replace(/[^0-9]/g, '') || '0');
+            return aFundingLow - bFundingLow;
+          case 'deadline-soon':
+            return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
+          case 'deadline-far':
+            return new Date(b.endDate).getTime() - new Date(a.endDate).getTime();
+          default:
+            return 0;
+        }
+      });
+    }
+
+    return filtered;
   }, [airdrops, filters]);
 
+  useEffect(() => {
+    setVisibleCount(9);
+  }, [filters]);
+
   const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 9, filteredAirdrops.length));
+    setVisibleCount(prev => Math.min(prev + 9, filteredAndSortedAirdrops.length));
   };
 
-  // Determine if we've reached the bottom of the page
   useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-        visibleCount < filteredAirdrops.length
+        visibleCount < filteredAndSortedAirdrops.length
       ) {
         loadMore();
       }
@@ -95,11 +117,23 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [visibleCount, filteredAirdrops.length]);
+  }, [visibleCount, filteredAndSortedAirdrops.length]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto px-6 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 9 }).map((_, index) => (
+            <AirdropSkeleton key={index} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto px-6 pb-20">
-      {filteredAirdrops.length === 0 ? (
+      {filteredAndSortedAirdrops.length === 0 ? (
         <div className="text-center py-16 card-gradient rounded-lg">
           <svg 
             viewBox="0 0 24 24" 
@@ -118,8 +152,14 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
         </div>
       ) : (
         <>
+          <div className="flex justify-between items-center mb-6">
+            <p className="text-sm text-muted-foreground">
+              Showing {Math.min(visibleCount, filteredAndSortedAirdrops.length)} of {filteredAndSortedAirdrops.length} airdrops
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAirdrops.slice(0, visibleCount).map((airdrop, index) => (
+            {filteredAndSortedAirdrops.slice(0, visibleCount).map((airdrop, index) => (
               <div 
                 key={airdrop.id} 
                 className="airdrop-card animate-fade-in"
@@ -130,13 +170,13 @@ const AirdropGrid: React.FC<AirdropGridProps> = ({ airdrops, filters }) => {
             ))}
           </div>
 
-          {visibleCount < filteredAirdrops.length && (
+          {visibleCount < filteredAndSortedAirdrops.length && (
             <div className="flex justify-center mt-12">
               <button
                 onClick={loadMore}
-                className="px-6 py-2 border border-border bg-card/50 hover:bg-card text-accent rounded-lg transition-all duration-200"
+                className="px-6 py-2 border border-border bg-card/50 hover:bg-card text-accent rounded-lg transition-all duration-200 hover:scale-105"
               >
-                Load More Airdrops
+                Load More Airdrops ({filteredAndSortedAirdrops.length - visibleCount} remaining)
               </button>
             </div>
           )}

@@ -1,15 +1,23 @@
-
 import { Airdrop } from '../utils/types';
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import CalendarButton from './CalendarButton';
+import { Bookmark, BookmarkCheck, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 
 interface AirdropCardProps {
   airdrop: Airdrop;
+  onBookmarkToggle?: (airdropId: string) => void;
+  onProgressUpdate?: (airdropId: string, progress: 'not-started' | 'in-progress' | 'completed') => void;
 }
 
-const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
-  // Format date to readable string
+const AirdropCard: React.FC<AirdropCardProps> = ({ 
+  airdrop, 
+  onBookmarkToggle,
+  onProgressUpdate 
+}) => {
+  const [isBookmarked, setIsBookmarked] = useState(airdrop.isBookmarked || false);
+  const [userProgress, setUserProgress] = useState(airdrop.userProgress || 'not-started');
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -19,7 +27,6 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
     });
   };
 
-  // Get status badge class
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
@@ -33,19 +40,49 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
     }
   };
 
-  // Extract YouTube video ID from URL
+  const getRiskBadge = (risk?: string) => {
+    switch (risk) {
+      case 'low':
+        return 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border border-green-200 dark:border-green-700';
+      case 'medium':
+        return 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-700';
+      case 'high':
+        return 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300 border border-red-200 dark:border-red-700';
+      default:
+        return '';
+    }
+  };
+
+  const getProgressIcon = (progress: string) => {
+    switch (progress) {
+      case 'completed':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'in-progress':
+        return <Clock className="w-4 h-4 text-yellow-500" />;
+      default:
+        return null;
+    }
+  };
+
+  const handleBookmarkToggle = () => {
+    setIsBookmarked(!isBookmarked);
+    onBookmarkToggle?.(airdrop.id);
+  };
+
+  const handleProgressUpdate = (newProgress: 'not-started' | 'in-progress' | 'completed') => {
+    setUserProgress(newProgress);
+    onProgressUpdate?.(airdrop.id, newProgress);
+  };
+
   const getYoutubeVideoId = (url?: string) => {
     if (!url) return null;
-    
-    // Handle various YouTube URL formats
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
-    
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
   return (
-    <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-200/60 dark:border-slate-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+    <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-200/60 dark:border-slate-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden group">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
@@ -60,10 +97,26 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
                 <span>{airdrop.blockchain}</span>
                 <span className="mx-1">•</span>
                 <span>{airdrop.tokenSymbol}</span>
+                {airdrop.communityRating && (
+                  <>
+                    <span className="mx-1">•</span>
+                    <span className="text-yellow-500">★ {airdrop.communityRating}</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleBookmarkToggle}
+              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            >
+              {isBookmarked ? (
+                <BookmarkCheck className="w-4 h-4 text-purple-500" />
+              ) : (
+                <Bookmark className="w-4 h-4 text-slate-400 hover:text-purple-500" />
+              )}
+            </button>
             <span className={`text-xs px-3 py-1 rounded-full font-medium ${getStatusBadge(airdrop.status)}`}>
               {airdrop.status}
             </span>
@@ -104,6 +157,11 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
               {airdrop.type}
             </span>
           )}
+          {airdrop.riskLevel && (
+            <span className={`text-xs px-3 py-1 rounded-full font-medium ${getRiskBadge(airdrop.riskLevel)}`}>
+              {airdrop.riskLevel.toUpperCase()} RISK
+            </span>
+          )}
           {airdrop.requiresKYC && (
             <span className="text-xs px-3 py-1 bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 rounded-full border border-orange-200 dark:border-orange-700 font-medium">
               KYC Required
@@ -119,6 +177,25 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
               Discord Required
             </span>
           )}
+        </div>
+
+        {/* Progress Tracking */}
+        <div className="flex items-center justify-between mb-4 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200/50 dark:border-slate-600/50">
+          <div className="flex items-center gap-2">
+            {getProgressIcon(userProgress)}
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              Progress: {userProgress.replace('-', ' ').toUpperCase()}
+            </span>
+          </div>
+          <select
+            value={userProgress}
+            onChange={(e) => handleProgressUpdate(e.target.value as any)}
+            className="text-xs bg-transparent border border-slate-300 dark:border-slate-600 rounded px-2 py-1"
+          >
+            <option value="not-started">Not Started</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
         </div>
         
         {airdrop.steps && airdrop.steps.length > 0 && (
@@ -149,7 +226,7 @@ const AirdropCard: React.FC<AirdropCardProps> = ({ airdrop }) => {
         )}
         
         <div className="flex justify-end items-center">          
-          <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-purple-500/25 transition-all duration-300">
+          <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-purple-500/25 transition-all duration-300 group-hover:scale-105">
             <a href={airdrop.link} target="_blank" rel="noopener noreferrer">
               Participate
               <svg 

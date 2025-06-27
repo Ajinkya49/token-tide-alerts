@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MoonIcon, SunIcon, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import Logo from "./Logo";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
@@ -35,13 +37,23 @@ const Navbar = () => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    // We would handle the search functionality here
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle search submission
-    console.log("Search for:", searchQuery);
+    if (searchQuery.trim()) {
+      // Navigate to the appropriate page with search query
+      const searchParams = new URLSearchParams();
+      searchParams.set('search', searchQuery.trim());
+      
+      // Navigate to home page with search query if not already there
+      if (location.pathname === '/') {
+        // Trigger search on current page
+        window.dispatchEvent(new CustomEvent('navbar-search', { detail: searchQuery.trim() }));
+      } else {
+        navigate(`/?${searchParams.toString()}`);
+      }
+    }
   };
 
   return (

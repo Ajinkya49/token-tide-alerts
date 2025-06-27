@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Filters from '../components/Filters';
@@ -14,7 +13,32 @@ const Index = () => {
     status: 'All',
     type: 'All',
     requiresKYC: 'All',
+    sortBy: 'newest',
   });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Generate search suggestions from airdrop data
+  const searchSuggestions = useMemo(() => {
+    const suggestions = new Set<string>();
+    mockAirdrops.forEach(airdrop => {
+      suggestions.add(airdrop.name);
+      suggestions.add(airdrop.tokenSymbol);
+      suggestions.add(airdrop.blockchain);
+      if (airdrop.fundingRound) suggestions.add(airdrop.fundingRound);
+    });
+    return Array.from(suggestions);
+  }, []);
+
+  const handleBookmarkToggle = (airdropId: string) => {
+    console.log('Bookmark toggled for:', airdropId);
+    // In a real app, this would update the backend
+  };
+
+  const handleProgressUpdate = (airdropId: string, progress: 'not-started' | 'in-progress' | 'completed') => {
+    console.log('Progress updated for:', airdropId, 'to:', progress);
+    // In a real app, this would update the backend
+  };
 
   return (
     <div className="min-h-screen app-gradient">
@@ -88,8 +112,16 @@ const Index = () => {
             </div>
           </div>
           
-          <Filters filters={filters} setFilters={setFilters} />
-          <AirdropGrid airdrops={mockAirdrops} filters={filters} />
+          <Filters 
+            filters={filters} 
+            setFilters={setFilters} 
+            suggestions={searchSuggestions}
+          />
+          <AirdropGrid 
+            airdrops={mockAirdrops} 
+            filters={filters} 
+            isLoading={isLoading}
+          />
         </section>
       </main>
       

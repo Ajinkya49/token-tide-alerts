@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -18,7 +18,9 @@ const Dashboard = () => {
     status: 'All',
     type: 'All',
     requiresKYC: 'All',
+    sortBy: 'newest',
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { addNotification } = useNotifications();
@@ -26,6 +28,52 @@ const Dashboard = () => {
     const saved = localStorage.getItem('seenAirdrops');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
+
+  // Generate search suggestions from airdrop data
+  const searchSuggestions = useMemo(() => {
+    const suggestions = new Set<string>();
+    mockAirdrops.forEach(airdrop => {
+      suggestions.add(airdrop.name);
+      suggestions.add(airdrop.tokenSymbol);
+      suggestions.add(airdrop.blockchain);
+      if (airdrop.fundingRound) suggestions.add(airdrop.fundingRound);
+    });
+    return Array.from(suggestions);
+  }, []);
+
+  const handleBookmarkToggle = (airdropId: string) => {
+    // Update local storage or backend
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarkedAirdrops') || '[]');
+    const isBookmarked = bookmarks.includes(airdropId);
+    
+    if (isBookmarked) {
+      const updated = bookmarks.filter((id: string) => id !== airdropId);
+      localStorage.setItem('bookmarkedAirdrops', JSON.stringify(updated));
+      toast({
+        title: "Bookmark removed",
+        description: "Airdrop removed from your bookmarks.",
+      });
+    } else {
+      bookmarks.push(airdropId);
+      localStorage.setItem('bookmarkedAirdrops', JSON.stringify(bookmarks));
+      toast({
+        title: "Bookmark added",
+        description: "Airdrop added to your bookmarks.",
+      });
+    }
+  };
+
+  const handleProgressUpdate = (airdropId: string, progress: 'not-started' | 'in-progress' | 'completed') => {
+    // Update local storage or backend
+    const progressData = JSON.parse(localStorage.getItem('airdropProgress') || '{}');
+    progressData[airdropId] = progress;
+    localStorage.setItem('airdropProgress', JSON.stringify(progressData));
+    
+    toast({
+      title: "Progress updated",
+      description: `Airdrop marked as ${progress.replace('-', ' ')}.`,
+    });
+  };
 
   useEffect(() => {
     // Check if user is logged in
@@ -49,12 +97,10 @@ const Dashboard = () => {
       const newAirdrops = mockAirdrops.filter(airdrop => !seenAirdrops.has(airdrop.id));
       
       if (newAirdrops.length > 0) {
-        // Add to seen airdrops
         const updatedSeenAirdrops = new Set(seenAirdrops);
         newAirdrops.forEach(airdrop => {
           updatedSeenAirdrops.add(airdrop.id);
           
-          // Send notification for each new airdrop
           addNotification({
             title: `New Airdrop: ${airdrop.name}`,
             message: `A new ${airdrop.blockchain} ${airdrop.type} airdrop is available!`,
@@ -65,7 +111,6 @@ const Dashboard = () => {
         setSeenAirdrops(updatedSeenAirdrops);
         localStorage.setItem('seenAirdrops', JSON.stringify([...updatedSeenAirdrops]));
         
-        // Show toast for new airdrops
         if (newAirdrops.length === 1) {
           toast({
             title: "New Airdrop Available",
@@ -80,11 +125,7 @@ const Dashboard = () => {
       }
     };
     
-    // Check on component mount
     checkForNewAirdrops();
-    
-    // Simulate polling for new airdrops every minute
-    // In a real app, this would be a WebSocket or server-sent events
     const interval = setInterval(checkForNewAirdrops, 60000);
     return () => clearInterval(interval);
   }, [seenAirdrops, addNotification, toast]);
@@ -99,7 +140,7 @@ const Dashboard = () => {
   };
 
   if (!user) {
-    return null; // Will redirect to login
+    return null;
   }
 
   return (
@@ -123,7 +164,6 @@ const Dashboard = () => {
               Discover and track the most promising crypto airdrops
             </p>
             
-            {/* Display upcoming airdrops with calendar integration */}
             <div className="mb-8">
               <h3 className="text-xl font-medium mb-4">Upcoming Airdrops</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -131,7 +171,7 @@ const Dashboard = () => {
                   .filter(airdrop => airdrop.status === 'Upcoming')
                   .slice(0, 3)
                   .map(airdrop => (
-                    <div key={airdrop.id} className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                    <div key={airdrop.id} className="flex items-center justify-between p-4 border rounded-lg bg-card/50 hover:bg-card/70 transition-all duration-200 hover:scale-105">
                       <div className="flex items-center gap-3">
                         <img src={airdrop.logo} alt={airdrop.name} className="w-10 h-10 rounded-full" />
                         <div>
@@ -146,8 +186,16 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <Filters filters={filters} setFilters={setFilters} />
-          <AirdropGrid airdrops={mockAirdrops} filters={filters} />
+          <Filters 
+            filters={filters} 
+            setFilters={setFilters} 
+            suggestions={searchSuggestions}
+          />
+          <AirdropGrid 
+            airdrops={mockAirdrops} 
+            filters={filters} 
+            isLoading={isLoading}
+          />
         </section>
       </main>
       

@@ -16,6 +16,8 @@ export type AirdropType = 'Token' | 'NFT' | 'Governance' | 'Other';
 
 export type FundingRange = 'All' | 'Under $50M' | '$50M-$100M' | '$100M-$200M' | 'Over $200M';
 
+export type SortOption = 'newest' | 'oldest' | 'funding-high' | 'funding-low' | 'deadline-soon' | 'deadline-far';
+
 export interface Airdrop {
   id: string;
   name: string;
@@ -33,9 +35,13 @@ export interface Airdrop {
   requiresDiscord?: boolean;
   link: string;
   steps?: string[];
-  fundingAmount?: string; // Funding amount field
-  fundingRound?: string; // Funding round field
-  videoUrl?: string; // YouTube tutorial URL
+  fundingAmount?: string;
+  fundingRound?: string;
+  videoUrl?: string;
+  isBookmarked?: boolean;
+  userProgress?: 'not-started' | 'in-progress' | 'completed';
+  riskLevel?: 'low' | 'medium' | 'high';
+  communityRating?: number;
 }
 
 export interface FilterOptions {
@@ -45,4 +51,6 @@ export interface FilterOptions {
   requiresKYC: boolean | 'All';
   fundingRange?: FundingRange;
   searchQuery?: string;
+  sortBy?: SortOption;
+  showBookmarked?: boolean;
 }
