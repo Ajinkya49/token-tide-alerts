@@ -18,6 +18,17 @@ export type FundingRange = 'All' | 'Under $50M' | '$50M-$100M' | '$100M-$200M' |
 
 export type SortOption = 'newest' | 'oldest' | 'funding-high' | 'funding-low' | 'deadline-soon' | 'deadline-far';
 
+export interface UserReview {
+  id: string;
+  userId: string;
+  username: string;
+  rating: number;
+  comment: string;
+  date: string;
+  helpful: number;
+  verified: boolean;
+}
+
 export interface Airdrop {
   id: string;
   name: string;
@@ -42,6 +53,10 @@ export interface Airdrop {
   userProgress?: 'not-started' | 'in-progress' | 'completed';
   riskLevel?: 'low' | 'medium' | 'high';
   communityRating?: number;
+  totalReviews?: number;
+  reviews?: UserReview[];
+  successRate?: number;
+  totalParticipants?: number;
 }
 
 export interface FilterOptions {

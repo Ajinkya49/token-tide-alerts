@@ -2,7 +2,8 @@ import { Airdrop } from '../utils/types';
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import CalendarButton from './CalendarButton';
-import { Bookmark, BookmarkCheck, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import CommunityFeatures from './CommunityFeatures';
+import { Bookmark, BookmarkCheck, CheckCircle, Clock, AlertTriangle, MessageCircle, Users, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface AirdropCardProps {
   airdrop: Airdrop;
@@ -17,6 +18,7 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(airdrop.isBookmarked || false);
   const [userProgress, setUserProgress] = useState(airdrop.userProgress || 'not-started');
+  const [showCommunityFeatures, setShowCommunityFeatures] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -81,16 +83,39 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
+  const renderStars = (rating: number) => {
+    return (
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`w-3 h-3 ${
+              star <= rating 
+                ? 'fill-yellow-400 text-yellow-400' 
+                : 'text-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-200/60 dark:border-slate-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden group">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <img 
-              src={airdrop.logo} 
-              alt={`${airdrop.name} logo`} 
-              className="w-10 h-10 rounded-full object-contain bg-white p-1 shadow-sm"
-            />
+            <div className="relative">
+              <img 
+                src={airdrop.logo} 
+                alt={`${airdrop.name} logo`} 
+                className="w-10 h-10 rounded-full object-cover bg-white shadow-sm border border-slate-200"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder.svg';
+                }}
+              />
+            </div>
             <div>
               <h3 className="font-bold text-slate-900 dark:text-slate-100">{airdrop.name}</h3>
               <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
@@ -100,7 +125,10 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
                 {airdrop.communityRating && (
                   <>
                     <span className="mx-1">•</span>
-                    <span className="text-yellow-500">★ {airdrop.communityRating}</span>
+                    <div className="flex items-center gap-1">
+                      {renderStars(airdrop.communityRating)}
+                      <span className="text-xs">({airdrop.totalReviews || 0})</span>
+                    </div>
                   </>
                 )}
               </div>
@@ -141,6 +169,40 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
           </div>
         </div>
         
+        {(airdrop.totalParticipants || airdrop.successRate) && (
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-3 mb-4 border border-purple-200/50 dark:border-purple-700/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {airdrop.totalParticipants && (
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4 text-purple-600" />
+                    <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
+                      {airdrop.totalParticipants}
+                    </span>
+                  </div>
+                )}
+                {airdrop.successRate && (
+                  <div className="text-sm font-medium text-green-600 dark:text-green-400">
+                    {airdrop.successRate}% Success
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setShowCommunityFeatures(!showCommunityFeatures)}
+                className="flex items-center gap-1 text-sm text-purple-600 hover:text-purple-700 dark:text-purple-400"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Community
+                {showCommunityFeatures ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+        
         {airdrop.fundingAmount && (
           <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 mb-4 border border-purple-200/50 dark:border-purple-700/50">
             <div className="flex justify-between">
@@ -150,6 +212,8 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
             <div className="font-bold text-purple-900 dark:text-purple-200">{airdrop.fundingAmount}</div>
           </div>
         )}
+        
+        
         
         <div className="flex flex-wrap gap-2 mb-4">
           {airdrop.type && (
@@ -179,7 +243,6 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
           )}
         </div>
 
-        {/* Progress Tracking */}
         <div className="flex items-center justify-between mb-4 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200/50 dark:border-slate-600/50">
           <div className="flex items-center gap-2">
             {getProgressIcon(userProgress)}
@@ -225,7 +288,7 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
           </div>
         )}
         
-        <div className="flex justify-end items-center">          
+        <div className="flex justify-end items-center mb-4">          
           <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-purple-500/25 transition-all duration-300 group-hover:scale-105">
             <a href={airdrop.link} target="_blank" rel="noopener noreferrer">
               Participate
@@ -245,6 +308,12 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
             </a>
           </Button>
         </div>
+
+        {showCommunityFeatures && (
+          <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-600">
+            <CommunityFeatures airdrop={airdrop} />
+          </div>
+        )}
       </div>
     </div>
   );
