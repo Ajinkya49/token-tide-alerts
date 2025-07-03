@@ -1,5 +1,16 @@
-
 import { Airdrop } from './types';
+
+export const blockchains = [
+  'Ethereum',
+  'Solana', 
+  'Binance Smart Chain',
+  'Polygon',
+  'Avalanche',
+  'Arbitrum',
+  'Optimism',
+  'Near',
+  'Other'
+];
 
 export const mockAirdrops: Airdrop[] = [
   {
