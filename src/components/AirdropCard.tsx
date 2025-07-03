@@ -19,6 +19,7 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
   const [isBookmarked, setIsBookmarked] = useState(airdrop.isBookmarked || false);
   const [userProgress, setUserProgress] = useState(airdrop.userProgress || 'not-started');
   const [showCommunityFeatures, setShowCommunityFeatures] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -100,28 +101,41 @@ const AirdropCard: React.FC<AirdropCardProps> = ({
     );
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const getTokenSymbolFallback = (tokenSymbol: string) => {
+    return (
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-lg border-2 border-white">
+        {tokenSymbol.slice(0, 2).toUpperCase()}
+      </div>
+    );
+  };
+
   return (
     <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-200/60 dark:border-slate-700/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden group">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <img 
-                src={airdrop.logo} 
-                alt={`${airdrop.name} logo`} 
-                className="w-10 h-10 rounded-full object-cover bg-white shadow-sm border border-slate-200"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = '/placeholder.svg';
-                }}
-              />
+              {!imageError ? (
+                <img 
+                  src={airdrop.logo} 
+                  alt={`${airdrop.name} logo`} 
+                  className="w-10 h-10 rounded-full object-cover bg-white shadow-lg border-2 border-white/50"
+                  onError={handleImageError}
+                />
+              ) : (
+                getTokenSymbolFallback(airdrop.tokenSymbol)
+              )}
             </div>
             <div>
               <h3 className="font-bold text-slate-900 dark:text-slate-100">{airdrop.name}</h3>
               <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
                 <span>{airdrop.blockchain}</span>
                 <span className="mx-1">•</span>
-                <span>{airdrop.tokenSymbol}</span>
+                <span className="font-semibold text-purple-600 dark:text-purple-400">{airdrop.tokenSymbol}</span>
                 {airdrop.communityRating && (
                   <>
                     <span className="mx-1">•</span>
